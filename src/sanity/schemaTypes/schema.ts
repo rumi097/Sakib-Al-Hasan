@@ -8,6 +8,9 @@ import experience from './experience';
 import publication from './publication';
 import organization from './organization';
 import contact from './contact';
+import nextGenSection from './nextGenSection';
+import orgActivitySection from './orgActivitySection';
+import expActivitySection from './expActivitySection'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   // Add all your imported schemas to this array
@@ -19,5 +22,8 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     publication,
     organization,
     contact,
+    nextGenSection,
+    orgActivitySection,
+    expActivitySection,
   ],
 }

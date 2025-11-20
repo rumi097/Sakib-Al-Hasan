@@ -1,9 +1,18 @@
-// pages/education.tsx
+// src/pages/education.tsx
 import { sanityClient, urlFor } from '../sanity/lib/sanity';
 import { GetStaticProps } from 'next';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
+// Interface for a single certificate
+interface Certificate {
+  _key: string;
+  name?: string;
+  image?: any;
+  link?: string;
+}
+
+// Interface for a single education entry
 interface EducationEntry {
   _id: string;
   degree: string;
@@ -12,20 +21,30 @@ interface EducationEntry {
   startDate: string;
   endDate?: string;
   description?: string;
-  certificateImage?: any;
-  certificateLink?: string;
+  certificates?: Certificate[]; // This is the array of certificates
 }
 
 interface EducationProps {
-  education: EducationEntry[];
+  educationEntries: EducationEntry[];
 }
 
-const Education: React.FC<EducationProps> = ({ education }) => {
+const Education: React.FC<EducationProps> = ({ educationEntries }) => {
+  if (!educationEntries || educationEntries.length === 0) {
+    return (
+      <section className="text-center py-16">
+        <h1 className="text-3xl font-bold text-gray-900">Education</h1>
+        <p className="text-gray-700 mt-4">
+          No education history found. Please add content in the Sanity Studio.
+        </p>
+      </section>
+    );
+  }
+  
   return (
     <section className="py-12">
       <h1 className="text-4xl font-extrabold text-gray-900 text-center mb-12">Education</h1>
-      <div className="space-y-10">
-        {education.map((entry, index) => (
+      <div className="space-y-10 max-w-4xl mx-auto">
+        {educationEntries.map((entry, index) => (
           <motion.div
             key={entry._id}
             className="bg-white p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
@@ -43,57 +62,64 @@ const Education: React.FC<EducationProps> = ({ education }) => {
             </p>
             {entry.description && <p className="text-gray-700 mt-4 leading-relaxed">{entry.description}</p>}
 
-            {(entry.certificateImage || entry.certificateLink) && (
-              <div className="mt-6 flex items-center space-x-4">
-                {entry.certificateImage && (
-                  <motion.a
-                    href={urlFor(entry.certificateImage).url()}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group relative block w-32 h-24 overflow-hidden rounded-md shadow-sm border border-gray-200"
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    <Image
-                      src={urlFor(entry.certificateImage).width(200).height(150).url()}
-                      alt={`${entry.degree} certificate`}
-                      layout="fill"
-                      objectFit="cover"
-                    />
-                    <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <span className="text-white text-sm">View Image</span>
+            {/* --- THIS IS THE NEW SECTION --- */}
+            {entry.certificates && entry.certificates.length > 0 && (
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <h4 className="font-semibold text-gray-800 mb-4">Certificates & Documents:</h4>
+                <div className="flex flex-wrap gap-4">
+                  
+                  {entry.certificates.map((cert) => (
+                    <div key={cert._key} className="p-4 border rounded-md bg-gray-50 flex-1 min-w-[200px] max-w-xs">
+                      
+                      {cert.image && (
+                        <div className="relative w-full h-32 mb-2 rounded overflow-hidden shadow-sm">
+                          <Image
+                            src={urlFor(cert.image).width(300).url()}
+                            alt={cert.name || 'Certificate Screenshot'}
+                            layout="fill"
+                            objectFit="cover"
+                          />
+                        </div>
+                      )}
+                      
+                      <p className="font-medium text-gray-900 wrap-break-word">
+                        {cert.name || 'Certificate'}
+                      </p>
+                      
+                      {cert.link && (
+                        <a
+                          href={cert.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                        >
+                          View Link
+                        </a>
+                      )}
                     </div>
-                  </motion.a>
-                )}
-                {entry.certificateLink && (
-                  <a
-                    href={entry.certificateLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center text-indigo-600 hover:text-indigo-800 transition-colors duration-200"
-                  >
-                    View Certificate
-                    <svg className="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                    </svg>
-                  </a>
-                )}
+                  ))}
+                  
+                </div>
               </div>
             )}
+            {/* --- END OF NEW SECTION --- */}
+
           </motion.div>
         ))}
       </div>
-       {/* Visual Representation */}
+       
+       {/* Your Timeline Section */}
       <div className="mt-16 text-center">
         <h3 className="text-2xl font-bold text-gray-800 mb-6">Education Journey Timeline</h3>
         <p className="text-gray-600 mb-8">This section illustrates the educational progression from your design sketch. </p>
-        
       </div>
     </section>
   );
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const education = await sanityClient.fetch(`
+  // The query MUST fetch the certificates array
+  const educationEntries = await sanityClient.fetch(`
     *[_type == "education"] | order(startDate desc) {
       _id,
       degree,
@@ -102,14 +128,13 @@ export const getStaticProps: GetStaticProps = async () => {
       startDate,
       endDate,
       description,
-      certificateImage,
-      certificateLink,
+      certificates // <-- Fetches the array
     }
   `);
 
   return {
     props: {
-      education,
+      educationEntries: educationEntries || null,
     },
     revalidate: 60,
   };

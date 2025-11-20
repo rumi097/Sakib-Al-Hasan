@@ -25,11 +25,6 @@ export default {
       type: 'date',
     },
     {
-      name: 'description',
-      title: 'Description',
-      type: 'text',
-    },
-    {
       name: 'logo',
       title: 'Organization Logo',
       type: 'image',

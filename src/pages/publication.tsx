@@ -1,4 +1,4 @@
-// pages/publication.tsx
+// src/pages/publication.tsx
 import { sanityClient, urlFor } from '../sanity/lib/sanity';
 import { GetStaticProps } from 'next';
 import { motion } from 'framer-motion';
@@ -17,9 +17,10 @@ interface Publication {
 
 interface PublicationProps {
   publications: Publication[];
-  // You can also fetch and pass links for Google Scholar/ResearchGate from a 'contact' or 'home' schema
-  googleScholarLink: string;
-  researchGateLink: string;
+  contactInfo: {
+    googleScholar?: string;
+    researchGate?: string;
+  }
 }
 
 // Helper to group publications by category
@@ -27,11 +28,28 @@ interface GroupedPublications {
   [category: string]: Publication[];
 }
 
-const PublicationPage: React.FC<PublicationProps> = ({ publications, googleScholarLink, researchGateLink }) => {
+// Animation for the container (staggered children)
+const listVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2, // Each pub fades in 0.2s after the previous
+    },
+  },
+};
+
+// Animation for each publication card
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 },
+};
+
+const PublicationPage: React.FC<PublicationProps> = ({ publications, contactInfo }) => {
   
   // Group publications by their category
-  const grouped = publications.reduce((acc, pub) => {
-    const category = pub.category || 'General'; // Default category if one isn't set
+  const grouped = (publications || []).reduce((acc, pub) => {
+    const category = pub.category || 'General'; // Default category
     if (!acc[category]) {
       acc[category] = [];
     }
@@ -44,10 +62,15 @@ const PublicationPage: React.FC<PublicationProps> = ({ publications, googleSchol
       <h1 className="text-4xl font-extrabold text-gray-900 text-center mb-12">Publications</h1>
 
       {/* Links from your sketch */}
-      <div className="flex justify-center space-x-4 mb-12">
-        {googleScholarLink && (
+      <motion.div 
+        className="flex justify-center flex-wrap gap-4 mb-12"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        {contactInfo?.googleScholar && (
           <a
-            href={googleScholarLink}
+            href={contactInfo.googleScholar}
             target="_blank"
             rel="noopener noreferrer"
             className="px-6 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 transition-colors duration-300"
@@ -55,9 +78,9 @@ const PublicationPage: React.FC<PublicationProps> = ({ publications, googleSchol
             Google Scholar
           </a>
         )}
-        {researchGateLink && (
+        {contactInfo?.researchGate && (
           <a
-            href={researchGateLink}
+            href={contactInfo.researchGate}
             target="_blank"
             rel="noopener noreferrer"
             className="px-6 py-2 border border-indigo-600 text-indigo-600 font-medium rounded-md hover:bg-indigo-50 transition-colors duration-300"
@@ -65,7 +88,7 @@ const PublicationPage: React.FC<PublicationProps> = ({ publications, googleSchol
             ResearchGate
           </a>
         )}
-      </div>
+      </motion.div>
 
       <div className="space-y-16">
         {Object.entries(grouped).map(([category, pubs], index) => (
@@ -78,12 +101,19 @@ const PublicationPage: React.FC<PublicationProps> = ({ publications, googleSchol
             <h2 className="text-3xl font-bold text-indigo-700 mb-6 border-b-2 border-indigo-200 pb-2">
               {category}
             </h2>
-            <div className="space-y-8">
+            <motion.div 
+              className="space-y-8"
+              variants={listVariants}
+              initial="hidden"
+              animate="show"
+            >
               {pubs.map((pub) => (
                 <motion.div
                   key={pub._id}
                   className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
-                  whileHover={{ scale: 1.02 }}
+                  variants={itemVariants} // <-- Staggered item animation
+                  whileHover={{ scale: 1.02, y: -4 }} // <-- Hover lift effect
+                  transition={{ type: 'spring', stiffness: 300 }}
                 >
                   <h3 className="text-xl font-semibold text-gray-900">{pub.title}</h3>
                   <p className="text-gray-600 mt-2">
@@ -92,7 +122,7 @@ const PublicationPage: React.FC<PublicationProps> = ({ publications, googleSchol
                   <p className="text-gray-800 italic mt-2">
                     {pub.journalConference} ({pub.year})
                   </p>
-                  <div className="mt-4 flex space-x-4">
+                  <div className="mt-4 flex flex-wrap gap-4">
                     {pub.publicationLink && (
                       <a
                         href={pub.publicationLink}
@@ -116,7 +146,7 @@ const PublicationPage: React.FC<PublicationProps> = ({ publications, googleSchol
                   </div>
                 </motion.div>
               ))}
-            </div>
+            </motion.div>
           </motion.div>
         ))}
       </div>
@@ -138,17 +168,18 @@ export const getStaticProps: GetStaticProps = async () => {
     }
   `);
 
-  // You would fetch these from your 'contact' or 'home' schema
-  const contactInfo = {
-    googleScholarLink: "https://scholar.google.com/your-client-profile",
-    researchGateLink: "https://www.researchgate.net/profile/your-client-profile"
-  };
+  // Fetch the Google Scholar/ResearchGate links from the 'contact' doc
+  const contactInfo = await sanityClient.fetch(`
+    *[_type == "contact"][0] {
+      googleScholar,
+      researchGate
+    }
+  `);
 
   return {
     props: {
-      publications,
-      googleScholarLink: contactInfo.googleScholarLink,
-      researchGateLink: contactInfo.researchGateLink,
+      publications: publications || [],
+      contactInfo: contactInfo || {},
     },
     revalidate: 60,
   };

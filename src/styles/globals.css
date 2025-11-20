@@ -1,3 +1,13 @@
-@import "tailwindcss/preflight";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import "tailwindcss";
+
+@layer base {
+  /* Global resets or font imports go here if needed */
+}
+
+@layer components {
+  /* Reusable UI component styles go here */
+}
+
+@layer utilities {
+  /* Custom utility classes (optional) */
+}

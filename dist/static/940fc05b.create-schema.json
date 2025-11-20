@@ -1,0 +1,854 @@
+[
+  {
+    "fields": [
+      {
+        "name": "introText",
+        "type": "string",
+        "title": "Introduction Text (e.g., \"Hi There!\")"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "title": "Client Name"
+      },
+      {
+        "description": "A comma-separated list of roles. e.g., \"Research Enthusiast, Backend Developer\"",
+        "name": "shortDescription",
+        "type": "string",
+        "title": "Roles (for typing animation)"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "profileImage",
+        "type": "image",
+        "title": "Profile Image (Hero Section)"
+      },
+      {
+        "name": "resumeFile",
+        "type": "file",
+        "title": "Resume/CV File"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "LinkedIn",
+                      "value": "linkedin"
+                    },
+                    {
+                      "title": "GitHub",
+                      "value": "github"
+                    },
+                    {
+                      "title": "Google Scholar",
+                      "value": "google-scholar"
+                    },
+                    {
+                      "title": "ResearchGate",
+                      "value": "research-gate"
+                    },
+                    {
+                      "title": "Email",
+                      "value": "email"
+                    },
+                    {
+                      "title": "Facebook",
+                      "value": "facebook"
+                    }
+                  ]
+                },
+                "name": "platform",
+                "type": "string"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "uri",
+                        "constraint": {
+                          "options": {
+                            "scheme": [
+                              "/^http$/",
+                              "/^https$/"
+                            ],
+                            "allowRelative": false,
+                            "relativeOnly": false,
+                            "allowCredentials": false
+                          }
+                        }
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "url",
+                "type": "url",
+                "title": "URL"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "socialLinks",
+        "type": "array",
+        "title": "Social Media Links"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "A different image for the \"About Me\" section (optional).",
+        "name": "aboutMeImage",
+        "type": "image"
+      },
+      {
+        "description": "The main paragraph for the \"About Me\" section.",
+        "name": "aboutMe",
+        "type": "text",
+        "title": "About Me Paragraph"
+      },
+      {
+        "description": "Add a list of your research interests. Each one will be a new item.",
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "researchInterests",
+        "type": "array"
+      }
+    ],
+    "name": "home",
+    "type": "document",
+    "title": "Home Page"
+  },
+  {
+    "fields": [
+      {
+        "name": "title",
+        "type": "string",
+        "title": "Skill Title"
+      },
+      {
+        "description": "Download icons from sites like svgrepo.com or simpleicons.org",
+        "name": "icon",
+        "type": "image",
+        "title": "Skill Icon (optional)"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Software Skills",
+              "value": "software"
+            },
+            {
+              "title": "Academic Skills",
+              "value": "academic"
+            },
+            {
+              "title": "Soft Skills",
+              "value": "soft"
+            }
+          ],
+          "layout": "radio"
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "software",
+                  "academic",
+                  "soft"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Select the category this skill belongs to",
+        "name": "category",
+        "type": "string"
+      }
+    ],
+    "name": "skill",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "e.g., \"Bachelor of Pharmacy\", \"Higher Secondary Certificate\"",
+        "name": "degree",
+        "type": "string",
+        "title": "Degree / Program"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "e.g., \"Gopalganj Science and Technology University\", \"Govt. Abdul Jabber College\"",
+        "name": "institution",
+        "type": "string"
+      },
+      {
+        "description": "e.g., \"Gopalganj, Bangladesh\"",
+        "name": "location",
+        "type": "string"
+      },
+      {
+        "options": {
+          "dateFormat": "MMMM YYYY"
+        },
+        "name": "startDate",
+        "type": "date"
+      },
+      {
+        "options": {
+          "dateFormat": "MMMM YYYY"
+        },
+        "description": "Leave this empty if your client is still studying here.",
+        "name": "endDate",
+        "type": "date"
+      },
+      {
+        "description": "Optional. Add a brief description, e.g., \"CGPA: 3.52\" or \"Key courses...\"",
+        "name": "description",
+        "type": "text"
+      },
+      {
+        "description": "Add one or more certificates, marksheets, or documents for this degree.",
+        "of": [
+          {
+            "fields": [
+              {
+                "description": "e.g., \"Graduation Certificate\" or \"H.S.C. Marksheet\"",
+                "name": "name",
+                "type": "string",
+                "title": "Certificate Name"
+              },
+              {
+                "description": "Upload a screenshot or photo of the certificate.",
+                "name": "image",
+                "type": "image",
+                "title": "Certificate Image"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "uri",
+                        "constraint": {
+                          "options": {
+                            "scheme": [
+                              "/^http$/",
+                              "/^https$/"
+                            ],
+                            "allowRelative": false,
+                            "relativeOnly": false,
+                            "allowCredentials": false
+                          }
+                        }
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "A link to view the certificate online (e.g., on a verification site)",
+                "name": "link",
+                "type": "url",
+                "title": "Certificate Link"
+              }
+            ],
+            "type": "object",
+            "name": "certificate"
+          }
+        ],
+        "name": "certificates",
+        "type": "array",
+        "title": "Certificates & Documents"
+      }
+    ],
+    "name": "education",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "name": "title",
+        "type": "string",
+        "title": "Job Title"
+      },
+      {
+        "name": "company",
+        "type": "string"
+      },
+      {
+        "name": "location",
+        "type": "string"
+      },
+      {
+        "name": "startDate",
+        "type": "date"
+      },
+      {
+        "name": "endDate",
+        "type": "date",
+        "title": "End Date (leave empty if current)"
+      },
+      {
+        "of": [
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Strong"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                },
+                {
+                  "value": "code",
+                  "title": "Code"
+                },
+                {
+                  "value": "underline",
+                  "title": "Underline"
+                },
+                {
+                  "value": "strike-through",
+                  "title": "Strike"
+                }
+              ]
+            },
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "h1",
+                "title": "Heading 1"
+              },
+              {
+                "value": "h2",
+                "title": "Heading 2"
+              },
+              {
+                "value": "h3",
+                "title": "Heading 3"
+              },
+              {
+                "value": "h4",
+                "title": "Heading 4"
+              },
+              {
+                "value": "h5",
+                "title": "Heading 5"
+              },
+              {
+                "value": "h6",
+                "title": "Heading 6"
+              },
+              {
+                "value": "blockquote",
+                "title": "Quote"
+              }
+            ],
+            "of": [],
+            "type": "block"
+          }
+        ],
+        "name": "description",
+        "type": "array"
+      }
+    ],
+    "name": "experience",
+    "type": "document",
+    "title": "Experience Entry"
+  },
+  {
+    "fields": [
+      {
+        "name": "title",
+        "type": "string",
+        "title": "Publication Title"
+      },
+      {
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "authors",
+        "type": "array"
+      },
+      {
+        "name": "journalConference",
+        "type": "string",
+        "title": "Journal/Conference"
+      },
+      {
+        "name": "year",
+        "type": "number"
+      },
+      {
+        "name": "abstract",
+        "type": "text",
+        "title": "Abstract (optional)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "publicationLink",
+        "type": "url"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "documentLink",
+        "type": "url",
+        "title": "Document Link (e.g., ResearchGate PDF)"
+      },
+      {
+        "name": "category",
+        "type": "string",
+        "title": "Category (e.g., Journal, Conference)"
+      }
+    ],
+    "name": "publication",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "name": "name",
+        "type": "string",
+        "title": "Organization Name"
+      },
+      {
+        "name": "role",
+        "type": "string",
+        "title": "Your Role/Position"
+      },
+      {
+        "name": "startDate",
+        "type": "date"
+      },
+      {
+        "name": "endDate",
+        "type": "date",
+        "title": "End Date (leave empty if current)"
+      },
+      {
+        "name": "logo",
+        "type": "image",
+        "title": "Organization Logo"
+      }
+    ],
+    "name": "organization",
+    "type": "document",
+    "title": "Organization/Affiliation"
+  },
+  {
+    "fields": [
+      {
+        "name": "email",
+        "type": "string"
+      },
+      {
+        "name": "phone",
+        "type": "string",
+        "title": "Phone Number (optional)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "github",
+        "type": "url",
+        "title": "GitHub Profile Link"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "linkedin",
+        "type": "url",
+        "title": "LinkedIn Profile Link"
+      }
+    ],
+    "name": "contact",
+    "type": "document",
+    "title": "Contact Information"
+  },
+  {
+    "fields": [
+      {
+        "description": "e.g., \"Workshops & Training\", \"Community Outreach\"",
+        "name": "title",
+        "type": "string",
+        "title": "Section Title"
+      },
+      {
+        "description": "A brief summary of this category of activities.",
+        "name": "description",
+        "type": "text",
+        "title": "Section Description"
+      },
+      {
+        "description": "Add one or more groups of activities for this section.",
+        "of": [
+          {
+            "fields": [
+              {
+                "description": "e.g., \"AI Workshop at BSMRSTU\", \"Rural Coding Camp\"",
+                "name": "groupTitle",
+                "type": "string"
+              },
+              {
+                "name": "groupDescription",
+                "type": "text"
+              },
+              {
+                "of": [
+                  {
+                    "fields": [
+                      {
+                        "options": {
+                          "hotspot": true
+                        },
+                        "name": "image",
+                        "type": "image"
+                      },
+                      {
+                        "name": "heading",
+                        "type": "string",
+                        "title": "Image Heading"
+                      },
+                      {
+                        "name": "description",
+                        "type": "string",
+                        "title": "Image Description"
+                      }
+                    ],
+                    "type": "object",
+                    "name": "galleryImage"
+                  }
+                ],
+                "name": "gallery",
+                "type": "array",
+                "title": "Image Gallery (3-5 images)"
+              }
+            ],
+            "type": "object",
+            "name": "activityGroup"
+          }
+        ],
+        "name": "activityGroups",
+        "type": "array"
+      }
+    ],
+    "name": "nextGenSection",
+    "type": "document",
+    "title": "NextGen Section"
+  },
+  {
+    "fields": [
+      {
+        "description": "e.g., \"Volunteer Work\", \"Leadership Seminars\"",
+        "name": "title",
+        "type": "string",
+        "title": "Section Title"
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "title": "Section Description"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "groupTitle",
+                "type": "string"
+              },
+              {
+                "name": "groupDescription",
+                "type": "text"
+              },
+              {
+                "of": [
+                  {
+                    "fields": [
+                      {
+                        "options": {
+                          "hotspot": true
+                        },
+                        "name": "image",
+                        "type": "image"
+                      },
+                      {
+                        "name": "heading",
+                        "type": "string",
+                        "title": "Image Heading"
+                      },
+                      {
+                        "name": "description",
+                        "type": "string",
+                        "title": "Image Description"
+                      }
+                    ],
+                    "type": "object",
+                    "name": "galleryImage"
+                  }
+                ],
+                "name": "gallery",
+                "type": "array",
+                "title": "Image Gallery"
+              }
+            ],
+            "type": "object",
+            "name": "activityGroup"
+          }
+        ],
+        "name": "activityGroups",
+        "type": "array"
+      }
+    ],
+    "name": "orgActivitySection",
+    "type": "document",
+    "title": "Organization Activity Section"
+  },
+  {
+    "fields": [
+      {
+        "description": "e.g., \"Software Projects\", \"Research Projects\", \"Case Studies\"",
+        "name": "title",
+        "type": "string",
+        "title": "Section Title"
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "title": "Section Description"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "groupTitle",
+                "type": "string"
+              },
+              {
+                "name": "groupDescription",
+                "type": "text"
+              },
+              {
+                "of": [
+                  {
+                    "fields": [
+                      {
+                        "options": {
+                          "hotspot": true
+                        },
+                        "name": "image",
+                        "type": "image"
+                      },
+                      {
+                        "name": "heading",
+                        "type": "string",
+                        "title": "Image Heading"
+                      },
+                      {
+                        "name": "description",
+                        "type": "string",
+                        "title": "Image Description"
+                      }
+                    ],
+                    "type": "object",
+                    "name": "galleryImage"
+                  }
+                ],
+                "name": "gallery",
+                "type": "array",
+                "title": "Image Gallery"
+              }
+            ],
+            "type": "object",
+            "name": "activityGroup"
+          }
+        ],
+        "name": "activityGroups",
+        "type": "array",
+        "title": "Activity Groups (Subsections)"
+      }
+    ],
+    "name": "expActivitySection",
+    "type": "document",
+    "title": "Experience Activity Section"
+  }
+]
