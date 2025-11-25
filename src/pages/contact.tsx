@@ -11,7 +11,7 @@ import { MdOutlineHeadsetMic } from 'react-icons/md';
 interface ContactInfo {
   email: string;
   phone?: string;
-  github?: string; // Kept in interface but not used in main buttons as per request
+  github?: string;
   linkedin?: string;
 }
 
@@ -85,16 +85,19 @@ const ContactPage: React.FC<ContactProps> = ({ contact }) => {
             animate="visible"
             className="group flex items-center justify-between p-5 bg-blue-50 hover:bg-blue-600 rounded-xl border border-blue-100 transition-all duration-300 hover:shadow-lg cursor-pointer"
           >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xl group-hover:bg-white group-hover:text-blue-600 transition-colors">
+            <div className="flex items-center gap-4 min-w-0 flex-1"> {/* Added min-w-0 and flex-1 */}
+              <div className="shrink-0 w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xl group-hover:bg-white group-hover:text-blue-600 transition-colors">
                 <FaEnvelope />
               </div>
-              <div>
+              <div className="min-w-0 flex-1"> {/* Added wrapper to constrain text width */}
                 <h3 className="text-lg font-bold text-gray-900 group-hover:text-white">Email Me</h3>
-                <p className="text-sm text-gray-500 group-hover:text-blue-100">{contact?.email || "Send an email"}</p>
+                {/* Added break-all and text-xs for mobile */}
+                <p className="text-xs md:text-sm text-gray-500 group-hover:text-blue-100 break-all">
+                  {contact?.email || "Send an email"}
+                </p>
               </div>
             </div>
-            <FaExternalLinkAlt className="text-gray-400 group-hover:text-white" />
+            <FaExternalLinkAlt className="shrink-0 text-gray-400 group-hover:text-white ml-2" />
           </motion.a>
 
           {/* 2. LinkedIn Button */}
@@ -109,16 +112,18 @@ const ContactPage: React.FC<ContactProps> = ({ contact }) => {
               animate="visible"
               className="group flex items-center justify-between p-5 bg-indigo-50 hover:bg-indigo-600 rounded-xl border border-indigo-100 transition-all duration-300 hover:shadow-lg cursor-pointer"
             >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-xl group-hover:bg-white group-hover:text-indigo-600 transition-colors">
+              <div className="flex items-center gap-4 min-w-0 flex-1">
+                <div className="shrink-0 w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-xl group-hover:bg-white group-hover:text-indigo-600 transition-colors">
                   <FaLinkedin />
                 </div>
-                <div>
+                <div className="min-w-0 flex-1">
                   <h3 className="text-lg font-bold text-gray-900 group-hover:text-white">LinkedIn Profile</h3>
-                  <p className="text-sm text-gray-500 group-hover:text-indigo-100">Let's connect professionally</p>
+                  <p className="text-xs md:text-sm text-gray-500 group-hover:text-indigo-100 wrap-break-word">
+                    Let's connect professionally
+                  </p>
                 </div>
               </div>
-              <FaExternalLinkAlt className="text-gray-400 group-hover:text-white" />
+              <FaExternalLinkAlt className="shrink-0 text-gray-400 group-hover:text-white ml-2" />
             </motion.a>
           )}
 
@@ -132,16 +137,18 @@ const ContactPage: React.FC<ContactProps> = ({ contact }) => {
               animate="visible"
               className="group flex items-center justify-between p-5 bg-green-50 hover:bg-green-600 rounded-xl border border-green-100 transition-all duration-300 hover:shadow-lg cursor-pointer"
             >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xl group-hover:bg-white group-hover:text-green-600 transition-colors">
+              <div className="flex items-center gap-4 min-w-0 flex-1">
+                <div className="shrink-0 w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xl group-hover:bg-white group-hover:text-green-600 transition-colors">
                   <FaPhone />
                 </div>
-                <div>
+                <div className="min-w-0 flex-1">
                   <h3 className="text-lg font-bold text-gray-900 group-hover:text-white">Call Me</h3>
-                  <p className="text-sm text-gray-500 group-hover:text-green-100">{contact.phone}</p>
+                  <p className="text-xs md:text-sm text-gray-500 group-hover:text-green-100 break-all">
+                    {contact.phone}
+                  </p>
                 </div>
               </div>
-              <FaExternalLinkAlt className="text-gray-400 group-hover:text-white" />
+              <FaExternalLinkAlt className="shrink-0 text-gray-400 group-hover:text-white ml-2" />
             </motion.a>
           )}
 

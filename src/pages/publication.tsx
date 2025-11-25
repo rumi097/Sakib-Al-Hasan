@@ -3,8 +3,8 @@ import { sanityClient, urlFor } from '../sanity/lib/sanity';
 import { GetStaticProps } from 'next';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { useState } from 'react';
-import { FaGoogle, FaResearchgate, FaExternalLinkAlt, FaChevronDown, FaChevronUp, FaFileAlt } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
+import { FaGoogle, FaResearchgate, FaQuoteRight, FaExternalLinkAlt, FaChevronDown, FaChevronUp, FaFileAlt } from 'react-icons/fa';
 
 // --- TYPES ---
 interface ResearchProfile {
@@ -30,10 +30,101 @@ interface PageProps {
   publications: Publication[];
 }
 
+// --- HELPER: Citation Counter ---
+const CitationCounter = ({ doi, manualCount }: { doi: string, manualCount?: number }) => {
+  const [count, setCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!doi) return;
+    const cleanDoi = doi.replace('https://doi.org/', '').replace('http://doi.org/', '');
+    fetch(`https://api.openalex.org/works/doi:${cleanDoi}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.cited_by_count !== undefined) setCount(data.cited_by_count);
+      })
+      .catch(() => {});
+  }, [doi]);
+
+  return <span>{count !== null ? count : (manualCount || 0)}</span>;
+};
+
+// --- NEW COMPONENT: Single Publication Card ---
+// We extracted this so each card can manage its own "Read More" state independently
+const PublicationCard = ({ pub }: { pub: Publication }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <div className="bg-white p-6 rounded-lg border border-gray-200 hover:border-indigo-300 transition-all shadow-sm hover:shadow-md flex flex-col md:flex-row gap-6">
+      
+      {/* Journal Cover Image */}
+      <div className="shrink-0 w-full md:w-32 h-40 relative bg-gray-100 rounded-md overflow-hidden shadow-inner">
+        {pub.journalCover ? (
+          <Image 
+            src={urlFor(pub.journalCover).url()} 
+            alt="Journal Cover" 
+            layout="fill" 
+            objectFit="cover" 
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-gray-300 bg-gray-50">
+            <FaFileAlt className="text-4xl opacity-20" />
+          </div>
+        )}
+      </div>
+
+      {/* Paper Details */}
+      <div className="grow">
+        <h4 className="text-lg font-bold text-gray-900 leading-tight mb-2">
+          {pub.title}
+        </h4>
+        <p className="text-sm text-gray-600 mb-3 italic">
+          {pub.authors?.join(', ')}
+        </p>
+        <div className="flex flex-wrap gap-4 text-xs text-gray-500 mb-4 font-medium">
+          <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded">
+            {pub.journalName || "Journal"}
+          </span>
+          <span className="bg-green-50 text-green-700 px-2 py-1 rounded">
+            {pub.year}
+          </span>
+        </div>
+        
+        {/* --- ABSTRACT SECTION WITH READ MORE BUTTON --- */}
+        {pub.abstract && (
+          <div className="mb-4">
+            <p className={`text-sm text-gray-600 leading-relaxed transition-all ${isExpanded ? '' : 'line-clamp-3'}`}>
+              <span className="font-semibold text-gray-900">Abstract: </span> 
+              {pub.abstract}
+            </p>
+            {/* Only show button if abstract is long enough to potentially need it, 
+                or just always show it for consistency */}
+            <button 
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="text-xs font-bold text-indigo-600 mt-1 hover:text-indigo-800 focus:outline-none flex items-center gap-1"
+            >
+              {isExpanded ? "Show Less" : "Read More..."}
+            </button>
+          </div>
+        )}
+
+        {pub.doi && (
+          <a 
+            href={pub.doi} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-800 transition-colors"
+          >
+            Read Full Paper <FaExternalLinkAlt size={12} />
+          </a>
+        )}
+      </div>
+    </div>
+  );
+};
+
 // --- MAIN PAGE ---
 const PublicationPage: React.FC<PageProps> = ({ profile, publications }) => {
   
-  // Calculate Total Publications dynamically
   const totalPublications = publications.length;
 
   // 1. Group publications by Topic
@@ -58,11 +149,10 @@ const PublicationPage: React.FC<PageProps> = ({ profile, publications }) => {
   return (
     <section className="min-h-screen bg-gray-50 py-12 px-4">
       
-      {/* --- SECTION 1: RESEARCH PROFILES (New Layout) --- */}
+      {/* --- SECTION 1: RESEARCH PROFILES --- */}
       <div className="max-w-5xl mx-auto mb-16">
         <h1 className="text-4xl font-extrabold text-gray-900 text-center mb-12">Research Profiles</h1>
         
-        {/* Flex Container for Cards + Center Circle */}
         <div className="flex flex-col md:flex-row items-center justify-center gap-6 relative">
           
           {/* Left Card: Google Scholar */}
@@ -78,8 +168,7 @@ const PublicationPage: React.FC<PageProps> = ({ profile, publications }) => {
             <p className="text-xs text-gray-400 mt-2 group-hover:text-blue-500 transition-colors">View Profile &rarr;</p>
           </motion.a>
 
-          {/* CENTER CIRCLE: Total Count */}
-          {/* Absolute on desktop to float in the middle, Static on mobile to sit between */}
+          {/* CENTER CIRCLE */}
           <div className="z-10 bg-white rounded-full w-24 h-24 shadow-xl border-4 border-indigo-50 flex flex-col items-center justify-center text-center shrink-0 md:absolute md:left-1/2 md:-translate-x-1/2">
             <span className="text-3xl font-extrabold text-indigo-600 leading-none">
               {totalPublications}
@@ -144,62 +233,7 @@ const PublicationPage: React.FC<PageProps> = ({ profile, publications }) => {
                       <div className="p-6 pt-0 border-t border-gray-100 bg-gray-50/50">
                         <div className="space-y-6 mt-6">
                           {groupedPubs[topic].map((pub) => (
-                            <div key={pub._id} className="bg-white p-6 rounded-lg border border-gray-200 hover:border-indigo-300 transition-all shadow-sm hover:shadow-md flex flex-col md:flex-row gap-6">
-                              
-                              {/* Journal Cover Image */}
-                              <div className="shrink-0 w-full md:w-32 h-40 relative bg-gray-100 rounded-md overflow-hidden shadow-inner">
-                                {pub.journalCover ? (
-                                  <Image 
-                                    src={urlFor(pub.journalCover).url()} 
-                                    alt="Journal Cover" 
-                                    layout="fill" 
-                                    objectFit="cover" 
-                                  />
-                                ) : (
-                                  <div className="w-full h-full flex items-center justify-center text-gray-300 bg-gray-50">
-                                    <FaFileAlt className="text-4xl opacity-20" />
-                                  </div>
-                                )}
-                              </div>
-
-                              {/* Paper Details */}
-                              <div className="grow">
-                                <h4 className="text-lg font-bold text-gray-900 leading-tight mb-2">
-                                  {pub.title}
-                                </h4>
-                                <p className="text-sm text-gray-600 mb-3 italic">
-                                  {pub.authors?.join(', ')}
-                                </p>
-                                <div className="flex flex-wrap gap-4 text-xs text-gray-500 mb-4 font-medium">
-                                  <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded">
-                                    {pub.journalName || "Journal"}
-                                  </span>
-                                  <span className="bg-green-50 text-green-700 px-2 py-1 rounded">
-                                    {pub.year}
-                                  </span>
-                                  {/* REMOVED THE "CITED BY" BLOCK HERE */}
-                                </div>
-                                
-                                {pub.abstract && (
-                                  <p className="text-sm text-gray-600 leading-relaxed mb-4 line-clamp-3 hover:line-clamp-none transition-all cursor-pointer">
-                                    <span className="font-semibold text-gray-900">Abstract: </span> 
-                                    {pub.abstract}
-                                  </p>
-                                )}
-
-                                {pub.doi && (
-                                  <a 
-                                    href={pub.doi} 
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-800 transition-colors"
-                                  >
-                                    Read Full Paper <FaExternalLinkAlt size={12} />
-                                  </a>
-                                )}
-                              </div>
-
-                            </div>
+                            <PublicationCard key={pub._id} pub={pub} />
                           ))}
                         </div>
                       </div>
