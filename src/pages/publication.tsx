@@ -48,25 +48,28 @@ const CitationCounter = ({ doi, manualCount }: { doi: string, manualCount?: numb
   return <span>{count !== null ? count : (manualCount || 0)}</span>;
 };
 
-// --- NEW COMPONENT: Single Publication Card ---
-// We extracted this so each card can manage its own "Read More" state independently
+// --- COMPONENT: Single Publication Card ---
 const PublicationCard = ({ pub }: { pub: Publication }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="bg-white p-6 rounded-lg border border-gray-200 hover:border-indigo-300 transition-all shadow-sm hover:shadow-md flex flex-col md:flex-row gap-6">
+    <motion.div 
+      layout 
+      className="bg-white p-6 rounded-lg border border-gray-200 hover:border-indigo-300 transition-colors shadow-sm hover:shadow-md flex flex-col md:flex-row gap-6"
+    >
       
       {/* Journal Cover Image */}
-      <div className="shrink-0 w-full md:w-32 h-40 relative bg-gray-100 rounded-md overflow-hidden shadow-inner">
+      <div className="shrink-0 w-full md:w-32 h-48 md:h-40 relative bg-gray-50 rounded-md overflow-hidden border border-gray-100 flex items-center justify-center">
         {pub.journalCover ? (
           <Image 
             src={urlFor(pub.journalCover).url()} 
             alt="Journal Cover" 
             layout="fill" 
-            objectFit="cover" 
+            objectFit="contain" // <--- FIX: 'contain' ensures the whole image is visible
+            className="p-2" // Adds breathing room so it looks like a document
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-300 bg-gray-50">
+          <div className="w-full h-full flex items-center justify-center text-gray-300">
             <FaFileAlt className="text-4xl opacity-20" />
           </div>
         )}
@@ -74,51 +77,57 @@ const PublicationCard = ({ pub }: { pub: Publication }) => {
 
       {/* Paper Details */}
       <div className="grow">
-        <h4 className="text-lg font-bold text-gray-900 leading-tight mb-2">
+        <motion.h4 layout="position" className="text-lg font-bold text-gray-900 leading-tight mb-2">
           {pub.title}
-        </h4>
-        <p className="text-sm text-gray-600 mb-3 italic">
+        </motion.h4>
+        <motion.p layout="position" className="text-sm text-gray-600 mb-3 italic">
           {pub.authors?.join(', ')}
-        </p>
-        <div className="flex flex-wrap gap-4 text-xs text-gray-500 mb-4 font-medium">
+        </motion.p>
+        <motion.div layout="position" className="flex flex-wrap gap-4 text-xs text-gray-500 mb-4 font-medium">
           <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded">
             {pub.journalName || "Journal"}
           </span>
           <span className="bg-green-50 text-green-700 px-2 py-1 rounded">
             {pub.year}
           </span>
-        </div>
+        </motion.div>
         
-        {/* --- ABSTRACT SECTION WITH READ MORE BUTTON --- */}
+        {/* --- ABSTRACT SECTION --- */}
         {pub.abstract && (
-          <div className="mb-4">
-            <p className={`text-sm text-gray-600 leading-relaxed transition-all ${isExpanded ? '' : 'line-clamp-3'}`}>
+          <motion.div layout="position" className="mb-4">
+            <p className={`text-sm text-gray-600 leading-relaxed ${isExpanded ? '' : 'line-clamp-3'}`}>
               <span className="font-semibold text-gray-900">Abstract: </span> 
               {pub.abstract}
             </p>
-            {/* Only show button if abstract is long enough to potentially need it, 
-                or just always show it for consistency */}
+            
+            {/* The Toggle Button */}
             <button 
               onClick={() => setIsExpanded(!isExpanded)}
-              className="text-xs font-bold text-indigo-600 mt-1 hover:text-indigo-800 focus:outline-none flex items-center gap-1"
+              className="text-xs font-bold text-indigo-600 mt-2 hover:text-indigo-800 focus:outline-none flex items-center gap-1 transition-colors"
             >
-              {isExpanded ? "Show Less" : "Read More..."}
+              {isExpanded ? (
+                <>Show Less <FaChevronUp size={10} /></>
+              ) : (
+                <>Read More <FaChevronDown size={10} /></>
+              )}
             </button>
-          </div>
+          </motion.div>
         )}
 
         {pub.doi && (
-          <a 
-            href={pub.doi} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-800 transition-colors"
-          >
-            Read Full Paper <FaExternalLinkAlt size={12} />
-          </a>
+          <motion.div layout="position">
+            <a 
+              href={pub.doi} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-800 transition-colors"
+            >
+              Read Full Paper <FaExternalLinkAlt size={12} />
+            </a>
+          </motion.div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -135,7 +144,7 @@ const PublicationPage: React.FC<PageProps> = ({ profile, publications }) => {
     return acc;
   }, {} as Record<string, Publication[]>);
 
-  // 2. Sort Topics by Count (Highest count first)
+  // 2. Sort Topics by Count
   const topics = Object.keys(groupedPubs).sort((a, b) => {
     return groupedPubs[b].length - groupedPubs[a].length;
   });
