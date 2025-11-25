@@ -3,162 +3,165 @@ import { sanityClient, urlFor } from '../sanity/lib/sanity';
 import { GetStaticProps } from 'next';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import React from 'react'; // Import React for grouping
 
-interface Skill {
-  _id: string;
-  title: string;
+// Define the structure of a single skill item inside the list
+interface SkillItem {
+  _key: string;
+  name: string;
   icon: any;
-  category: 'software' | 'academic' | 'soft';
+}
+
+// Define the structure of the Group Document
+interface SkillGroup {
+  _id: string;
+  categoryTitle: string;
+  skillsList: SkillItem[];
 }
 
 interface SkillsProps {
-  skills: Skill[];
+  skillGroups: SkillGroup[];
 }
 
-// Helper to group skills
-interface GroupedSkills {
-  software: Skill[];
-  academic: Skill[];
-  soft: Skill[];
-}
+// Animation Variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.05 },
+  },
+};
 
-const Skills: React.FC<SkillsProps> = ({ skills }) => {
+const itemVariants = {
+  hidden: { opacity: 0, scale: 0.9 },
+  show: { opacity: 1, scale: 1 },
+};
 
-  // Group the skills by category
-  const groupedSkills = React.useMemo(() => {
-    const groups: GroupedSkills = {
-      software: [],
-      academic: [],
-      soft: [],
-    };
-    skills.forEach((skill) => {
-      if (groups[skill.category]) {
-        groups[skill.category].push(skill);
-      }
-    });
-    return groups;
-  }, [skills]);
-
-  // Animation for the container (staggered children)
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1, // Each skill fades in 0.1s after the previous
-      },
-    },
-  };
-
-  // Animation for each skill card
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 },
-  };
-
+const Skills: React.FC<SkillsProps> = ({ skillGroups }) => {
   return (
-    <section className="py-12">
-      <h1 className="text-4xl font-extrabold text-gray-900 text-center mb-12">
+    <section className="py-12 min-h-screen bg-gray-50">
+      {/* PLAIN HTML TITLE (No animation to ensure visibility) */}
+      <h1 className="text-4xl font-extrabold text-gray-900 text-center mb-16">
         Skills & Abilities
       </h1>
 
-      {/* --- Software Skills --- */}
-      <div className="mb-16">
-        <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">Software Skills</h2>
-        <motion.div 
-          className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6"
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-        >
-          {groupedSkills.software.map((skill) => (
-            <motion.div
-              key={skill._id}
-              className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center justify-center text-center"
-              variants={itemVariants}
-              whileHover={{ scale: 1.05, y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
-              transition={{ type: 'spring', stiffness: 300 }}
-            >
-              {skill.icon && (
-                <div className="w-16 h-16 relative mb-3">
-                  <Image
-                    src={urlFor(skill.icon).url()}
-                    alt={skill.title}
-                    layout="fill"
-                    objectFit="contain"
-                  />
-                </div>
-              )}
-              <h3 className="text-lg font-semibold text-gray-800">{skill.title}</h3>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
+      <div className="space-y-16">
+        {skillGroups.map((group, index) => {
+          // Check if this is the "Software" category
+          const isSoftware = group.categoryTitle.toLowerCase().includes('software');
+          
+          // Fix for top section visibility
+          const isFirst = index === 0;
 
-      {/* --- Academic Skills --- */}
-      <div className="mb-16">
-        <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">Academic Skills</h2>
-        <motion.div 
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-        >
-          {groupedSkills.academic.map((skill) => (
-            <motion.div
-              key={skill._id}
-              className="bg-white p-6 rounded-lg shadow-lg text-center"
-              variants={itemVariants}
-              whileHover={{ scale: 1.05, y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
-              transition={{ type: 'spring', stiffness: 300 }}
-            >
-              <h3 className="text-lg font-semibold text-gray-800">{skill.title}</h3>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
+          return (
+            <div key={group._id} className="max-w-7xl mx-auto px-4">
+              {/* Category Title */}
+              <div className="mb-8 flex items-center justify-center">
+                 <h2 className="text-2xl font-bold text-gray-800 border-b-2 border-indigo-500 pb-2 px-4 inline-block">
+                  {group.categoryTitle}
+                </h2>
+              </div>
 
-      {/* --- Soft Skills --- */}
-      <div>
-        <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">Soft Skills</h2>
-        <motion.div 
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-        >
-          {groupedSkills.soft.map((skill) => (
-            <motion.div
-              key={skill._id}
-              className="bg-white p-6 rounded-lg shadow-lg text-center"
-              variants={itemVariants}
-              whileHover={{ scale: 1.05, y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
-              transition={{ type: 'spring', stiffness: 300 }}
-            >
-              <h3 className="text-lg font-semibold text-gray-800">{skill.title}</h3>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
+              {/* LAYOUT LOGIC */}
+              <motion.div 
+                className={
+                  isSoftware 
+                    ? 'grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6' // Software: Original Grid
+                    : 'columns-1 md:columns-2 lg:columns-4 gap-4 space-y-4' // Others: Professional List Columns
+                }
+                variants={containerVariants}
+                
+                // Fix: Ensure first section loads immediately
+                initial={isFirst ? "show" : "hidden"}
+                whileInView={isFirst ? undefined : "show"}
+                viewport={{ once: true, margin: "-50px" }}
+              >
+                {(group.skillsList || []).map((skill) => (
+                  <motion.div
+                    key={skill._key}
+                    // Conditional Styling
+                    className={`
+                      bg-white rounded-lg shadow-sm transition-all duration-200
+                      ${isSoftware 
+                        ? 'p-6 flex flex-col items-center justify-center text-center h-full border border-gray-200' 
+                        : 'p-4 inline-block w-full break-inside-avoid mb-0 border border-gray-200 border-l-4 border-l-indigo-500' 
+                      }
+                    `}
+                    variants={itemVariants}
+                    
+                    // Hover Logic
+                    whileHover={isSoftware ? { 
+                      scale: 1.05, 
+                      y: -5, 
+                      boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
+                      borderColor: '#818cf8' 
+                    } : { 
+                      scale: 1, 
+                      y: 0, 
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                      backgroundColor: '#f8fafc' 
+                    }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                  >
+                    
+                    {/* --- SOFTWARE SKILLS DESIGN (Icon + Text) --- */}
+                    {isSoftware && (
+                      <>
+                        <div className="w-14 h-14 relative mb-3">
+                          {skill.icon ? (
+                            <Image
+                              src={urlFor(skill.icon).url()}
+                              alt={skill.name}
+                              layout="fill"
+                              objectFit="contain"
+                            />
+                          ) : (
+                            <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center text-xl">
+                              ✨
+                            </div>
+                          )}
+                        </div>
+                        <h3 className="font-semibold text-gray-700 leading-snug text-md">
+                          {skill.name}
+                        </h3>
+                      </>
+                    )}
 
+                    {/* --- PROFESSIONAL TEXT SKILLS DESIGN (Text Only) --- */}
+                    {!isSoftware && (
+                      <div className="flex items-center">
+                        <h3 className="font-medium text-gray-800 text-sm md:text-base leading-snug text-left">
+                          {skill.name}
+                        </h3>
+                      </div>
+                    )}
+
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
+          );
+        })}
+      </div>
     </section>
   );
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const skills = await sanityClient.fetch(`
-    *[_type == "skill"]{
+  const skillGroups = await sanityClient.fetch(`
+    *[_type == "skill"] | order(categoryTitle desc) {
       _id,
-      title,
-      icon,
-      category
+      categoryTitle,
+      skillsList[] {
+        _key,
+        name,
+        icon
+      }
     }
   `);
 
   return {
     props: {
-      skills: skills || [],
+      skillGroups: skillGroups || [],
     },
     revalidate: 60,
   };

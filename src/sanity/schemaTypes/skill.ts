@@ -1,37 +1,49 @@
 // sanity/schemas/skill.ts
 export default {
   name: 'skill',
-  title: 'Skill',
+  title: 'Skill Group',
   type: 'document',
   fields: [
-    { name: 'title', title: 'Skill Title', type: 'string' },
-    { 
-      name: 'icon', 
-      title: 'Skill Icon (optional)', 
-      type: 'image',
-      description: 'Download icons from sites like svgrepo.com or simpleicons.org'
-    },
     {
-      name: 'category',
-      title: 'Category',
+      name: 'categoryTitle',
+      title: 'Category Title',
       type: 'string',
-      description: 'Select the category this skill belongs to',
-      options: {
-        list: [
-          { title: 'Software Skills', value: 'software' },
-          { title: 'Academic Skills', value: 'academic' },
-          { title: 'Soft Skills', value: 'soft' },
-        ],
-        layout: 'radio', // This makes it easy to select
-      },
+      description: 'e.g., "Software Skills", "Academic Skills", "Soft Skills"',
       validation: (Rule: any) => Rule.required(),
     },
+    {
+      name: 'skillsList',
+      title: 'List of Skills',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          name: 'skillItem',
+          title: 'Skill Item',
+          fields: [
+            { 
+              name: 'name', 
+              title: 'Skill Name', 
+              type: 'string',
+              description: 'e.g., "Python", "Leadership"'
+            },
+            { 
+              name: 'icon', 
+              title: 'Icon', 
+              type: 'image',
+              options: { hotspot: true }
+            },
+            // Optional: If you want to show proficiency
+            // { name: 'proficiency', title: 'Proficiency', type: 'string' } 
+          ],
+          preview: {
+            select: {
+              title: 'name',
+              media: 'icon'
+            }
+          }
+        }
+      ]
+    }
   ],
-  preview: {
-    select: {
-      title: 'title',
-      subtitle: 'category',
-      media: 'icon',
-    },
-  },
 }

@@ -2,17 +2,16 @@
 import { sanityClient, urlFor } from '../sanity/lib/sanity';
 import { GetStaticProps } from 'next';
 import { motion } from 'framer-motion';
-import { useForm, ValidationError } from '@formspree/react';
 import Image from 'next/image';
 
 // --- Import Icons ---
-import { FaUser, FaEnvelope, FaCommentDots, FaPhone, FaPaperPlane } from 'react-icons/fa';
+import { FaEnvelope, FaPhone, FaLinkedin, FaExternalLinkAlt } from 'react-icons/fa';
 import { MdOutlineHeadsetMic } from 'react-icons/md';
 
 interface ContactInfo {
   email: string;
   phone?: string;
-  github?: string;
+  github?: string; // Kept in interface but not used in main buttons as per request
   linkedin?: string;
 }
 
@@ -21,163 +20,132 @@ interface ContactProps {
 }
 
 const ContactPage: React.FC<ContactProps> = ({ contact }) => {
-  const formspreeId = process.env.NEXT_PUBLIC_FORMSPREE_ID;
-  const [state, handleSubmit] = useForm(formspreeId || '');
-
-  if (state.succeeded) {
-    return (
-      <motion.div
-        className="text-center py-20"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <h2 className="text-3xl font-bold text-green-600">Thanks for your message!</h2>
-        <p className="text-gray-700 mt-4">I'll get back to you soon.</p>
-      </motion.div>
-    );
-  }
+  
+  // Animation variants for the buttons
+  const buttonVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.1, // Staggered animation
+        duration: 0.5,
+      },
+    }),
+  };
 
   return (
-    <section className="py-12">
+    <section className="py-12 min-h-[80vh] flex flex-col justify-center">
       <motion.h1 
         className="text-4xl font-extrabold text-gray-900 text-center mb-12 flex items-center justify-center gap-3"
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 0.5 }}
       >
         <MdOutlineHeadsetMic /> Get In Touch
       </motion.h1>
       
-      {/* --- This is the new "Box" from the video --- */}
+      {/* --- Box Container --- */}
       <motion.div 
-        className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center bg-white p-8 md:p-12 rounded-lg shadow-xl"
+        className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-white p-8 md:p-16 rounded-2xl shadow-2xl"
         initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
+        animate={{ opacity: 1, y: 0 }} 
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         
         {/* Left Column: Illustration */}
         <motion.div
-          className="hidden md:block" // Hides on mobile
+          className="hidden md:flex justify-center"
           initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
+          animate={{ opacity: 1, x: 0 }} 
           transition={{ duration: 0.5, delay: 0.4 }}
         >
           <Image 
-            src="/contact.svg" // This is the file you must add to '/public'
+            src="/contact.svg"
             alt="Contact me" 
-            width={500} 
-            height={500} 
-            className="w-full h-auto"
+            width={400} 
+            height={400} 
+            className="w-full h-auto max-w-xs"
+            priority 
           />
         </motion.div>
 
-        {/* Right Column: Form */}
-        <motion.div
-          initial={{ opacity: 0, x: 50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-        >
-          <form onSubmit={handleSubmit} className="space-y-6">
-            
-            {/* --- Name Field --- */}
-            <div>
-              <label htmlFor="name" className="sr-only">Your Name</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FaUser className="text-gray-400" />
-                </div>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  placeholder="Name"
-                  required
-                  className="mt-1 block w-full px-4 py-3 pl-10 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                />
-              </div>
-            </div>
+        {/* Right Column: Direct Action Buttons */}
+        <div className="flex flex-col space-y-6">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center md:text-left">
+            Connect directly:
+          </h2>
 
-            {/* --- Email Field --- */}
-            <div>
-              <label htmlFor="email" className="sr-only">Your Email</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FaEnvelope className="text-gray-400" />
-                </div>
-                <input
-                  id="email"
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  required
-                  className="mt-1 block w-full px-4 py-3 pl-10 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                />
+          {/* 1. Email Button */}
+          <motion.a
+            href={`mailto:${contact?.email}`}
+            custom={0}
+            variants={buttonVariants}
+            initial="hidden"
+            animate="visible"
+            className="group flex items-center justify-between p-5 bg-blue-50 hover:bg-blue-600 rounded-xl border border-blue-100 transition-all duration-300 hover:shadow-lg cursor-pointer"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xl group-hover:bg-white group-hover:text-blue-600 transition-colors">
+                <FaEnvelope />
               </div>
-              <ValidationError
-                prefix="Email"
-                field="email"
-                errors={state.errors}
-                className="text-red-600 text-sm mt-1"
-              />
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 group-hover:text-white">Email Me</h3>
+                <p className="text-sm text-gray-500 group-hover:text-blue-100">{contact?.email || "Send an email"}</p>
+              </div>
             </div>
+            <FaExternalLinkAlt className="text-gray-400 group-hover:text-white" />
+          </motion.a>
 
-            {/* --- Phone Field (NEW) --- */}
-            <div>
-              <label htmlFor="phone" className="sr-only">Phone</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <FaPhone className="text-gray-400" />
+          {/* 2. LinkedIn Button */}
+          {contact?.linkedin && (
+            <motion.a
+              href={contact.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              custom={1}
+              variants={buttonVariants}
+              initial="hidden"
+              animate="visible"
+              className="group flex items-center justify-between p-5 bg-indigo-50 hover:bg-indigo-600 rounded-xl border border-indigo-100 transition-all duration-300 hover:shadow-lg cursor-pointer"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-xl group-hover:bg-white group-hover:text-indigo-600 transition-colors">
+                  <FaLinkedin />
                 </div>
-                <input
-                  id="phone"
-                  type="tel"
-                  name="phone"
-                  placeholder="Phone (Optional)"
-                  className="mt-1 block w-full px-4 py-3 pl-10 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                />
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 group-hover:text-white">LinkedIn Profile</h3>
+                  <p className="text-sm text-gray-500 group-hover:text-indigo-100">Let's connect professionally</p>
+                </div>
               </div>
-            </div>
+              <FaExternalLinkAlt className="text-gray-400 group-hover:text-white" />
+            </motion.a>
+          )}
 
-            {/* --- Message Field --- */}
-            <div>
-              <label htmlFor="message" className="sr-only">Message</label>
-              <div className="relative">
-                <div className="absolute top-4 left-0 pl-3 flex items-center pointer-events-none">
-                  <FaCommentDots className="text-gray-400" />
+          {/* 3. Phone Button */}
+          {contact?.phone && (
+            <motion.a
+              href={`tel:${contact.phone}`}
+              custom={2}
+              variants={buttonVariants}
+              initial="hidden"
+              animate="visible"
+              className="group flex items-center justify-between p-5 bg-green-50 hover:bg-green-600 rounded-xl border border-green-100 transition-all duration-300 hover:shadow-lg cursor-pointer"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xl group-hover:bg-white group-hover:text-green-600 transition-colors">
+                  <FaPhone />
                 </div>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={5}
-                  placeholder="Message"
-                  required
-                  className="mt-1 block w-full px-4 py-3 pl-10 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                />
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 group-hover:text-white">Call Me</h3>
+                  <p className="text-sm text-gray-500 group-hover:text-green-100">{contact.phone}</p>
+                </div>
               </div>
-              <ValidationError
-                prefix="Message"
-                field="message"
-                errors={state.errors}
-                className="text-red-600 text-sm mt-1"
-              />
-            </div>
-            
-            <div>
-              <button
-                type="submit"
-                disabled={state.submitting}
-                className="w-full flex items-center justify-center px-6 py-3 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 transition-colors duration-300 disabled:bg-gray-400 shadow-lg"
-              >
-                Submit
-                <FaPaperPlane className="ml-2 w-4 h-4" />
-              </button>
-            </div>
-          </form>
-        </motion.div>
+              <FaExternalLinkAlt className="text-gray-400 group-hover:text-white" />
+            </motion.a>
+          )}
+
+        </div>
       </motion.div>
     </section>
   );
