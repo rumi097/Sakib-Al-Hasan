@@ -49,13 +49,18 @@ const CitationCounter = ({ doi, manualCount }: { doi: string, manualCount?: numb
 };
 
 // --- COMPONENT: Single Publication Card ---
-const PublicationCard = ({ pub }: { pub: Publication }) => {
+const PublicationCard = ({ pub, index }: { pub: Publication, index: number }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <motion.div 
       layout 
-      className="bg-white p-6 rounded-lg border border-gray-200 hover:border-indigo-300 transition-colors shadow-sm hover:shadow-md flex flex-col md:flex-row gap-6"
+      className="bg-white p-6 rounded-lg border border-gray-200 hover:border-indigo-300 transition-colors shadow-sm hover:shadow-xl flex flex-col md:flex-row gap-6"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.3, delay: index * 0.02 }}
+      whileHover={{ scale: 1.01, y: -3 }}
     >
       
       {/* Journal Cover Image */}
@@ -237,12 +242,12 @@ const PublicationPage: React.FC<PageProps> = ({ profile, publications }) => {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
                     >
                       <div className="p-6 pt-0 border-t border-gray-100 bg-gray-50/50">
                         <div className="space-y-6 mt-6">
-                          {groupedPubs[topic].map((pub) => (
-                            <PublicationCard key={pub._id} pub={pub} />
+                          {groupedPubs[topic].map((pub, index) => (
+                            <PublicationCard key={pub._id} pub={pub} index={index} />
                           ))}
                         </div>
                       </div>

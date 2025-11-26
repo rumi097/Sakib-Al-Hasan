@@ -15,12 +15,32 @@ export const Footer = () => {
           <p className="text-sm mb-3 max-w-xs md:max-w-none mx-auto md:mx-0">
             Thank you for visiting my portfolio. Connect with me over socials.
           </p>
-          <div className="flex space-x-4 mt-2">
-            <a href="#" className="hover:text-indigo-400 transition-colors"><FaLinkedin size={20} /></a>
-            <a href="#" className="hover:text-indigo-400 transition-colors"><FaGithub size={20} /></a>
-            <a href="#" className="hover:text-indigo-400 transition-colors"><FaGoogle size={20} /></a>
-            <a href="#" className="hover:text-indigo-400 transition-colors"><SiResearchgate size={20} /></a>
-          </div>
+            <div className="flex space-x-4 mt-2">
+            <a
+              href="https://www.linkedin.com/in/sakib-al-h-353236216/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-indigo-400 transition-colors"
+            >
+              <FaLinkedin size={20} />
+            </a>
+            <a
+              href="https://scholar.google.com/citations?user=2UhUtNsAAAAJ&hl=en"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-indigo-400 transition-colors"
+            >
+              <FaGoogle size={20} />
+            </a>
+            <a
+              href="https://www.researchgate.net/profile/Md-Sakib-Al-Hasan-2"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-indigo-400 transition-colors"
+            >
+              <SiResearchgate size={20} />
+            </a>
+            </div>
         </div>
 
         {/* Column 2: Quick Links */}

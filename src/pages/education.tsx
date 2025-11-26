@@ -42,15 +42,23 @@ const Education: React.FC<EducationProps> = ({ educationEntries }) => {
   
   return (
     <section className="py-12">
-      <h1 className="text-4xl font-extrabold text-gray-900 text-center mb-12">Education</h1>
+      <motion.h1 
+        className="text-4xl font-extrabold text-gray-900 text-center mb-12"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        Education
+      </motion.h1>
       <div className="space-y-10 max-w-4xl mx-auto">
         {educationEntries.map((entry, index) => (
           <motion.div
             key={entry._id}
-            className="bg-white p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.1, duration: 0.5 }}
+            className="bg-white p-8 rounded-lg shadow-md hover:shadow-2xl transition-all duration-300"
+            initial={{ opacity: 0, x: -50, rotateY: -10 }}
+            animate={{ opacity: 1, x: 0, rotateY: 0 }}
+            transition={{ delay: index * 0.15, duration: 0.6, type: "spring" }}
+            whileHover={{ scale: 1.02, y: -5 }}
           >
             <h2 className="text-2xl font-bold text-indigo-700">{entry.degree}</h2>
             <p className="text-xl font-semibold text-gray-800 mt-1">{entry.institution}, {entry.location}</p>

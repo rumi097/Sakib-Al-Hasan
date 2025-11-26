@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import FloatingNav from './FloatingNav';
 
 const navLinks = [
   { name: 'Home', href: '/' },
@@ -10,6 +11,7 @@ const navLinks = [
   { name: 'Experience', href: '/experience' },
   { name: 'Publication', href: '/publication' },
   { name: 'Organization', href: '/organization' },
+  { name: 'NextGen', href: '/nextgen' },
   { name: 'Contact', href: '/contact' },
 ];
 
@@ -18,7 +20,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-800">
-      <nav className="bg-white shadow-md p-4 sticky top-0 z-50">
+      {/* Floating Navigation */}
+      <FloatingNav />
+      
+      <nav className="bg-white shadow-md p-4 sticky top-0 z-40">
         <div className="container mx-auto flex justify-between items-center">
           <Link href="/" className="text-2xl font-bold text-indigo-700">
             {/* Replace with client's name or logo */}

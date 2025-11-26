@@ -13,6 +13,7 @@ import { loadSlim } from "tsparticles-slim";
 
 // --- 1. IMPORT YOUR NEW FOOTER COMPONENT ---
 import { Footer } from '../components/Footer';
+import FloatingNav from '../components/FloatingNav';
 
 // This is the Navbar component
 function Navbar() {
@@ -204,6 +205,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       {/* We add 'flex flex-col' to make the footer sticky */}
       <div className="relative z-10 flex flex-col min-h-screen"> 
         <Navbar />
+        
+        {/* Floating Navigation Menu */}
+        <FloatingNav />
+        
         {/* 'flex-grow' makes the main content fill the available space */}
         <main className="container mx-auto py-8 px-4 grow">
           <Component {...pageProps} />
