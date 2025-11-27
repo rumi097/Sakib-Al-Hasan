@@ -76,8 +76,20 @@ export const Footer = () => {
 
       </div>
       
-      <div className="text-center text-xs mt-10 border-t border-gray-700 pt-6">
-        &copy; {new Date().getFullYear()} Md. Sakib Al Hasan. All rights reserved.
+      {/* Bottom Copyright & Developer Credit */}
+      <div className="text-center text-xs mt-10 border-t border-gray-700 pt-6 space-y-2">
+        <p>&copy; {new Date().getFullYear()} Md. Sakib Al Hasan. All rights reserved.</p>
+        <p>
+          Developed by{' '}
+          <a 
+            href="https://devonity-website.vercel.app" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="text-indigo-400 hover:text-indigo-300 font-semibold transition-colors"
+          >
+            Devonity Technologies Limited (DTL)
+          </a>
+        </p>
       </div>
     </footer>
   );
