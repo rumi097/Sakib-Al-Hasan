@@ -305,6 +305,43 @@ export default defineType({
         },
       ],
     }),
+
+    // Achievements Preview
+    defineField({
+      name: 'showcaseAchievements',
+      title: 'Showcase Achievements',
+      type: 'object',
+      description: 'Select achievements to display on home page',
+      fields: [
+        {
+          name: 'enabled',
+          title: 'Enable Achievements Preview',
+          type: 'boolean',
+          initialValue: true,
+        },
+        {
+          name: 'title',
+          title: 'Section Title',
+          type: 'string',
+          initialValue: 'Key Achievements',
+          hidden: ({ parent }) => !parent?.enabled,
+        },
+        {
+          name: 'selectedAchievements',
+          title: 'Selected Achievements (Max 4)',
+          type: 'array',
+          description: 'Choose up to 4 achievements to showcase',
+          validation: Rule => Rule.max(4).warning('Maximum 4 entries recommended'),
+          of: [
+            {
+              type: 'reference',
+              to: [{ type: 'achievement' }],
+            },
+          ],
+          hidden: ({ parent }) => !parent?.enabled,
+        },
+      ],
+    }),
   ],
   preview: {
     prepare() {

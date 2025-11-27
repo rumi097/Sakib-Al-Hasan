@@ -73,6 +73,16 @@ const navItems: NavItem[] = [
     bgGradient: 'from-red-500 to-red-600'
   },
   { 
+    name: 'Achievement', 
+    href: '/achievement', 
+    icon: (
+      <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+      </svg>
+    ),
+    bgGradient: 'from-yellow-500 to-orange-600'
+  },
+  { 
     name: 'Contact', 
     href: '/contact', 
     icon: (
@@ -101,7 +111,7 @@ const FloatingNav: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.15 }}
             >
               {navItems.map((item, index) => {
                 const isActive = router.pathname === item.href || 
@@ -114,11 +124,11 @@ const FloatingNav: React.FC = () => {
                     animate={{ scale: 1, x: 0, opacity: 1 }}
                     exit={{ scale: 0, x: 100, opacity: 0 }}
                     transition={{ 
-                      duration: 0.4, 
-                      delay: index * 0.08,
+                      duration: 0.2, 
+                      delay: index * 0.03,
                       type: 'spring',
-                      stiffness: 300,
-                      damping: 25
+                      stiffness: 400,
+                      damping: 20
                     }}
                     className="relative group"
                   >
@@ -129,7 +139,7 @@ const FloatingNav: React.FC = () => {
                         className={`w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br ${item.bgGradient} bg-opacity-80 backdrop-blur-md text-white shadow-md cursor-pointer relative overflow-hidden ${
                           isActive ? 'ring-2 ring-white ring-opacity-60 shadow-[0_0_15px_rgba(99,102,241,0.3)]' : ''
                         }`}
-                        transition={{ duration: 0.3 }}
+                        transition={{ duration: 0.2 }}
                       >
                         {/* Animated background gradient */}
                         <motion.div
@@ -193,7 +203,7 @@ const FloatingNav: React.FC = () => {
         animate={{ 
           rotate: isOpen ? 90 : 0,
         }}
-        transition={{ duration: 0.4, type: 'spring', stiffness: 200 }}
+        transition={{ duration: 0.2, type: 'spring', stiffness: 300 }}
       >
         {/* Animated gradient overlay */}
         <motion.div
@@ -229,7 +239,7 @@ const FloatingNav: React.FC = () => {
               initial={{ rotate: -90, opacity: 0 }}
               animate={{ rotate: 0, opacity: 1 }}
               exit={{ rotate: 90, opacity: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.15 }}
               className="relative z-10"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -242,7 +252,7 @@ const FloatingNav: React.FC = () => {
               initial={{ rotate: -90, opacity: 0 }}
               animate={{ rotate: 0, opacity: 1 }}
               exit={{ rotate: 90, opacity: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.15 }}
               className="relative z-10"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

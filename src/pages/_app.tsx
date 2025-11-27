@@ -27,6 +27,7 @@ function Navbar() {
     { name: 'Education', href: '/education' },
     { name: 'Experience', href: '/experience' },
     { name: 'Publication', href: '/publication' },
+    { name: 'Achievement', href: '/achievement' },
     { name: 'Organization', href: '/organization' },
     { name: 'NextGen', href: '/nextgen' },
     { name: 'Contact', href: '/contact' },
