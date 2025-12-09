@@ -1,0 +1,328 @@
+<svg width="800" height="500" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Modern Gradients -->
+    <linearGradient id="sky" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC"/>
+      <stop offset="50%" stop-color="#EFF6FF"/>
+      <stop offset="100%" stop-color="#E0F2FE"/>
+    </linearGradient>
+    
+    <linearGradient id="primary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60A5FA"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+    
+    <linearGradient id="secondary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A78BFA"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+    
+    <linearGradient id="success" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+    
+    <linearGradient id="warning" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+
+    <!-- Filters -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-opacity="0.15"/>
+    </filter>
+
+    <!-- Animations -->
+    <style>
+      @keyframes float { 
+        0%, 100% { transform: translateY(0); } 
+        50% { transform: translateY(-20px); } 
+      }
+      @keyframes floatSlow { 
+        0%, 100% { transform: translateY(0); } 
+        50% { transform: translateY(-15px); } 
+      }
+      @keyframes floatFast { 
+        0%, 100% { transform: translateY(0); } 
+        50% { transform: translateY(-25px); } 
+      }
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.15); opacity: 0.8; }
+      }
+      @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      @keyframes slideUp {
+        0% { transform: translateY(20px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+      }
+      @keyframes ping {
+        0% { transform: scale(1); opacity: 1; }
+        75%, 100% { transform: scale(2); opacity: 0; }
+      }
+      @keyframes dash {
+        to { stroke-dashoffset: -40; }
+      }
+      
+      .float { animation: float 5s ease-in-out infinite; }
+      .float-slow { animation: floatSlow 6s ease-in-out infinite; }
+      .float-fast { animation: floatFast 4s ease-in-out infinite; }
+      .pulse { animation: pulse 2.5s ease-in-out infinite; }
+      .rotate { animation: rotate 20s linear infinite; }
+      .slide-up { animation: slideUp 1s ease-out; }
+      .ping { animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite; }
+      .dash { stroke-dasharray: 10 10; animation: dash 3s linear infinite; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="500" fill="url(#sky)"/>
+  
+  <!-- Abstract background shapes -->
+  <circle cx="120" cy="100" r="80" fill="#DBEAFE" opacity="0.4" class="float-slow"/>
+  <circle cx="680" cy="400" r="100" fill="#E0E7FF" opacity="0.35" class="float"/>
+  <circle cx="700" cy="120" r="70" fill="#FECACA" opacity="0.3" class="float-fast"/>
+
+  <!-- Main Workspace Scene -->
+  <g transform="translate(150, 100)">
+    
+    <!-- Desk/Table surface -->
+    <ellipse cx="250" cy="350" rx="280" ry="30" fill="#CBD5E1" opacity="0.3"/>
+    
+    <!-- Desktop Computer Monitor -->
+    <g class="float-slow" filter="url(#shadow)">
+      <!-- Monitor stand -->
+      <rect x="200" y="310" width="100" height="8" rx="4" fill="#64748B"/>
+      <rect x="240" y="300" width="20" height="20" rx="4" fill="#94A3B8"/>
+      
+      <!-- Monitor frame -->
+      <rect x="140" y="140" width="220" height="165" rx="12" fill="#1E293B"/>
+      <rect x="148" y="148" width="204" height="149" rx="8" fill="#0F172A"/>
+      
+      <!-- Screen content - Video call grid -->
+      <rect x="155" y="155" width="190" height="135" rx="6" fill="#1E3A8A" opacity="0.2"/>
+      
+      <!-- Video participants grid -->
+      <g>
+        <!-- Participant 1 -->
+        <rect x="162" y="162" width="85" height="60" rx="6" fill="url(#primary)" opacity="0.3"/>
+        <circle cx="204" cy="185" r="15" fill="#BFDBFE" class="pulse"/>
+        <text x="204" y="210" fill="#DBEAFE" font-family="Arial" font-size="10" text-anchor="middle" font-weight="600">John D.</text>
+        
+        <!-- Participant 2 -->
+        <rect x="255" y="162" width="85" height="60" rx="6" fill="url(#secondary)" opacity="0.3"/>
+        <circle cx="297" cy="185" r="15" fill="#DDD6FE" class="pulse" style="animation-delay: 0.3s"/>
+        <text x="297" y="210" fill="#E9D5FF" font-family="Arial" font-size="10" text-anchor="middle" font-weight="600">Sarah M.</text>
+        
+        <!-- Participant 3 -->
+        <rect x="162" y="230" width="85" height="60" rx="6" fill="url(#success)" opacity="0.3"/>
+        <circle cx="204" cy="253" r="15" fill="#A7F3D0" class="pulse" style="animation-delay: 0.6s"/>
+        <text x="204" y="278" fill="#D1FAE5" font-family="Arial" font-size="10" text-anchor="middle" font-weight="600">Mike R.</text>
+        
+        <!-- Participant 4 (You) with speaking indicator -->
+        <rect x="255" y="230" width="85" height="60" rx="6" fill="url(#warning)" opacity="0.4"/>
+        <circle cx="297" cy="253" r="15" fill="#FCD34D" class="pulse" style="animation-delay: 0.9s"/>
+        <text x="297" y="278" fill="#FEF3C7" font-family="Arial" font-size="10" text-anchor="middle" font-weight="600">You</text>
+        
+        <!-- Speaking indicator waves -->
+        <g opacity="0.6">
+          <path d="M 285 245 Q 283 253 285 261" stroke="#FBBF24" stroke-width="2" fill="none" class="pulse"/>
+          <path d="M 309 245 Q 311 253 309 261" stroke="#FBBF24" stroke-width="2" fill="none" class="pulse" style="animation-delay: 0.2s"/>
+        </g>
+      </g>
+      
+      <!-- Bottom control bar -->
+      <rect x="155" y="270" width="190" height="20" rx="4" fill="#1E293B" opacity="0.8"/>
+      
+      <!-- Control icons -->
+      <circle cx="175" cy="280" r="5" fill="#EF4444"/>
+      <circle cx="195" cy="280" r="5" fill="#10B981"/>
+      <rect x="212" y="276" width="8" height="8" rx="2" fill="#3B82F6"/>
+      
+      <!-- Camera indicator -->
+      <circle cx="350" cy="150" r="3" fill="#94A3B8"/>
+    </g>
+
+    <!-- Laptop on the side -->
+    <g transform="translate(-20, 200)" class="float" filter="url(#shadow)">
+      <!-- Laptop base -->
+      <path d="M40 105 L40 110 Q40 115 45 115 L175 115 Q180 115 180 110 L180 105 Z" fill="#475569"/>
+      
+      <!-- Laptop screen -->
+      <rect x="50" y="40" width="120" height="70" rx="4" fill="#1E293B"/>
+      <rect x="55" y="45" width="110" height="60" rx="3" fill="#0F172A"/>
+      
+      <!-- Screen content - Email client -->
+      <rect x="60" y="50" width="100" height="50" fill="#0A192F"/>
+      
+      <!-- Email list items -->
+      <rect x="65" y="55" width="90" height="10" rx="2" fill="#1E40AF" opacity="0.3"/>
+      <circle cx="70" cy="60" r="3" fill="#60A5FA"/>
+      <line x1="78" y1="60" x2="130" y2="60" stroke="#94A3B8" stroke-width="1.5"/>
+      
+      <rect x="65" y="68" width="90" height="10" rx="2" fill="#059669" opacity="0.3"/>
+      <circle cx="70" cy="73" r="3" fill="#34D399"/>
+      <line x1="78" y1="73" x2="120" y2="73" stroke="#94A3B8" stroke-width="1.5"/>
+      
+      <rect x="65" y="81" width="90" height="10" rx="2" fill="#7C3AED" opacity="0.3"/>
+      <circle cx="70" cy="86" r="3" fill="#A78BFA"/>
+      <line x1="78" y1="86" x2="135" y2="86" stroke="#94A3B8" stroke-width="1.5"/>
+      
+      <!-- Notification badge -->
+      <circle cx="170" cy="48" r="6" fill="#EF4444" class="pulse"/>
+      <text x="170" y="51" fill="#fff" font-family="Arial" font-size="8" text-anchor="middle" font-weight="bold">9</text>
+    </g>
+
+    <!-- Smartphone standing -->
+    <g transform="translate(420, 210)" class="float-fast" filter="url(#shadow)">
+      <!-- Phone body -->
+      <rect x="0" y="0" width="70" height="130" rx="12" fill="#1E293B"/>
+      <rect x="3" y="3" width="64" height="124" rx="10" fill="#0F172A"/>
+      
+      <!-- Screen -->
+      <rect x="6" y="8" width="58" height="110" rx="8" fill="#0C1E3A"/>
+      
+      <!-- Status bar -->
+      <text x="10" y="18" fill="#94A3B8" font-family="Arial" font-size="6" font-weight="600">9:41</text>
+      <rect x="54" y="13" width="1.5" height="4" rx="0.5" fill="#94A3B8"/>
+      <rect x="56" y="12" width="1.5" height="5" rx="0.5" fill="#94A3B8"/>
+      <rect x="58" y="11" width="1.5" height="6" rx="0.5" fill="#3B82F6" class="pulse"/>
+      
+      <!-- Messaging app interface -->
+      <g transform="translate(0, 25)">
+        <!-- Header -->
+        <rect x="6" y="0" width="58" height="15" fill="#1E40AF" opacity="0.3"/>
+        <circle cx="14" cy="7.5" r="4" fill="#60A5FA"/>
+        <text x="22" y="10" fill="#DBEAFE" font-family="Arial" font-size="7" font-weight="600">Messages</text>
+        
+        <!-- Message bubbles -->
+        <!-- Incoming -->
+        <rect x="10" y="20" width="38" height="12" rx="6" fill="url(#primary)" opacity="0.8" class="slide-up"/>
+        <text x="14" y="28" fill="#fff" font-family="Arial" font-size="6">Hi! How are you?</text>
+        
+        <!-- Outgoing -->
+        <rect x="22" y="36" width="38" height="12" rx="6" fill="url(#success)" opacity="0.8" class="slide-up" style="animation-delay: 0.3s"/>
+        <text x="26" y="44" fill="#fff" font-family="Arial" font-size="6">Great! Let's talk</text>
+        
+        <!-- Typing indicator -->
+        <rect x="10" y="52" width="25" height="8" rx="4" fill="#374151" opacity="0.5"/>
+        <circle cx="16" cy="56" r="1.5" fill="#9CA3AF" class="pulse"/>
+        <circle cx="21" cy="56" r="1.5" fill="#9CA3AF" class="pulse" style="animation-delay: 0.2s"/>
+        <circle cx="26" cy="56" r="1.5" fill="#9CA3AF" class="pulse" style="animation-delay: 0.4s"/>
+      </g>
+      
+      <!-- Home indicator -->
+      <rect x="25" y="122" width="20" height="3" rx="1.5" fill="#475569" opacity="0.5"/>
+    </g>
+
+    <!-- Coffee cup -->
+    <g transform="translate(30, 280)" class="float-slow" filter="url(#shadow)">
+      <ellipse cx="25" cy="55" rx="20" ry="5" fill="#B45309" opacity="0.3"/>
+      <rect x="10" y="20" width="30" height="35" rx="3" fill="#D97706" opacity="0.9"/>
+      <rect x="12" y="22" width="26" height="30" rx="2" fill="#F59E0B" opacity="0.8"/>
+      <ellipse cx="25" cy="20" rx="13" ry="3" fill="#FBBF24"/>
+      
+      <!-- Handle -->
+      <path d="M40 30 Q50 30 50 40 Q50 50 40 50" stroke="#D97706" stroke-width="3" fill="none"/>
+      
+      <!-- Steam -->
+      <g opacity="0.5">
+        <path d="M20 10 Q18 5 20 0" stroke="#94A3B8" stroke-width="1.5" fill="none" stroke-linecap="round" class="float-fast"/>
+        <path d="M30 12 Q28 7 30 2" stroke="#94A3B8" stroke-width="1.5" fill="none" stroke-linecap="round" class="float" style="animation-delay: 0.3s"/>
+      </g>
+    </g>
+
+  </g>
+
+  <!-- Floating notification cards -->
+  <g transform="translate(50, 50)" class="float-fast" filter="url(#shadow)">
+    <rect width="140" height="60" rx="12" fill="#fff"/>
+    <rect x="2" y="2" width="136" height="56" rx="10" fill="url(#primary)" opacity="0.1"/>
+    
+    <!-- Email icon -->
+    <circle cx="30" cy="30" r="15" fill="url(#primary)"/>
+    <rect x="22" y="24" width="16" height="12" rx="2" fill="none" stroke="#fff" stroke-width="2"/>
+    <path d="M22 26 L30 32 L38 26" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+    
+    <!-- Text -->
+    <text x="52" y="25" fill="#1E293B" font-family="Arial" font-size="11" font-weight="700">New Email</text>
+    <text x="52" y="38" fill="#64748B" font-family="Arial" font-size="9">2 unread messages</text>
+    
+    <!-- Ping effect -->
+    <circle cx="30" cy="30" r="15" fill="url(#primary)" opacity="0.3" class="ping"/>
+  </g>
+
+  <g transform="translate(610, 80)" class="float" filter="url(#shadow)">
+    <rect width="140" height="60" rx="12" fill="#fff"/>
+    <rect x="2" y="2" width="136" height="56" rx="10" fill="url(#success)" opacity="0.1"/>
+    
+    <!-- Phone icon -->
+    <circle cx="30" cy="30" r="15" fill="url(#success)"/>
+    <path d="M24 26 Q23 25 24 24 L26 22 Q27 21 28 22 L30 24 Q31 25 30 26 L28 28" 
+          fill="#fff" stroke="#fff" stroke-width="1"/>
+    <path d="M35 24 Q39 28 35 32" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+    
+    <!-- Text -->
+    <text x="52" y="25" fill="#1E293B" font-family="Arial" font-size="11" font-weight="700">Missed Call</text>
+    <text x="52" y="38" fill="#64748B" font-family="Arial" font-size="9">Sarah at 2:30 PM</text>
+    
+    <!-- Ping effect -->
+    <circle cx="30" cy="30" r="15" fill="url(#success)" opacity="0.3" class="ping" style="animation-delay: 0.5s"/>
+  </g>
+
+  <g transform="translate(610, 340)" class="float-slow" filter="url(#shadow)">
+    <rect width="140" height="60" rx="12" fill="#fff"/>
+    <rect x="2" y="2" width="136" height="56" rx="10" fill="url(#secondary)" opacity="0.1"/>
+    
+    <!-- Chat icon -->
+    <circle cx="30" cy="30" r="15" fill="url(#secondary)"/>
+    <rect x="23" y="24" width="14" height="10" rx="3" fill="none" stroke="#fff" stroke-width="2"/>
+    <path d="M27 34 L30 37 L33 34" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Text -->
+    <text x="52" y="25" fill="#1E293B" font-family="Arial" font-size="11" font-weight="700">Team Chat</text>
+    <text x="52" y="38" fill="#64748B" font-family="Arial" font-size="9">5 new messages</text>
+    
+    <!-- Ping effect -->
+    <circle cx="30" cy="30" r="15" fill="url(#secondary)" opacity="0.3" class="ping" style="animation-delay: 1s"/>
+  </g>
+
+  <!-- Connection lines -->
+  <g opacity="0.2">
+    <path d="M 300 200 Q 200 180 120 110" stroke="url(#primary)" stroke-width="3" fill="none" class="dash"/>
+    <path d="M 500 280 Q 600 250 650 140" stroke="url(#success)" stroke-width="3" fill="none" class="dash"/>
+    <path d="M 450 350 Q 580 360 650 400" stroke="url(#secondary)" stroke-width="3" fill="none" class="dash"/>
+  </g>
+
+  <!-- Decorative elements -->
+  <g opacity="0.3">
+    <circle cx="100" cy="450" r="6" fill="#3B82F6" class="pulse"/>
+    <circle cx="700" cy="50" r="5" fill="#A78BFA" class="pulse" style="animation-delay: 0.5s"/>
+    <circle cx="750" cy="350" r="5.5" fill="#10B981" class="pulse" style="animation-delay: 1s"/>
+  </g>
+
+  <!-- WiFi/Connection icon -->
+  <g transform="translate(380, 30)" class="float" opacity="0.4">
+    <path d="M20 30 Q10 20 20 10" stroke="url(#primary)" stroke-width="3" fill="none" stroke-linecap="round" class="pulse"/>
+    <path d="M25 28 Q18 22 25 16" stroke="url(#primary)" stroke-width="3" fill="none" stroke-linecap="round" class="pulse" style="animation-delay: 0.3s"/>
+    <circle cx="28" cy="32" r="3" fill="url(#primary)"/>
+  </g>
+
+  <!-- Cloud icon -->
+  <g transform="translate(650, 250)" class="float-slow" opacity="0.3">
+    <ellipse cx="20" cy="15" rx="12" ry="8" fill="#94A3B8"/>
+    <ellipse cx="10" cy="18" rx="8" ry="6" fill="#94A3B8"/>
+    <ellipse cx="30" cy="18" rx="10" ry="7" fill="#94A3B8"/>
+    <rect x="8" y="15" width="24" height="8" fill="#94A3B8"/>
+  </g>
+</svg>

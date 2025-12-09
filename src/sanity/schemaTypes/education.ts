@@ -6,6 +6,12 @@ export default {
   type: 'document', // <-- This "document" type lets your client add unlimited new degrees
   fields: [
     {
+      name: 'section',
+      title: 'Section',
+      type: 'string',
+      description: 'Group entries by section, e.g., "College", "University"',
+    },
+    {
       name: 'degree',
       title: 'Degree / Program',
       type: 'string',
@@ -76,6 +82,63 @@ export default {
               title: 'Certificate Link',
               description: 'A link to view the certificate online (e.g., on a verification site)',
               type: 'url',
+            },
+            {
+              name: 'file',
+              title: 'PDF File',
+              type: 'file',
+              options: { accept: '.pdf' },
+              description: 'Upload a PDF version of the certificate (optional).',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'semesters',
+      title: 'Semesters',
+      description: 'Add semester-wise results and documents (e.g., 1.1, 1.2, Academic Transcript).',
+      type: 'array',
+      of: [
+        {
+          name: 'semester',
+          title: 'Semester',
+          type: 'object',
+          fields: [
+            {
+              name: 'label',
+              title: 'Label (e.g., 1.1)',
+              type: 'string',
+              validation: (Rule: any) => Rule.required(),
+            },
+            {
+              name: 'title',
+              title: 'Title (optional)',
+              type: 'string',
+              description: 'e.g., First Year First Semester',
+            },
+            {
+              name: 'result',
+              title: 'Result / GPA',
+              type: 'string',
+              description: 'e.g., GPA: 3.85',
+            },
+            {
+              name: 'documents',
+              title: 'Documents (PDF or Link)',
+              type: 'array',
+              of: [
+                {
+                  name: 'eduDocument',
+                  title: 'Document',
+                  type: 'object',
+                  fields: [
+                    { name: 'name', title: 'Name', type: 'string' },
+                    { name: 'link', title: 'External Link', type: 'url' },
+                    { name: 'file', title: 'PDF File', type: 'file', options: { accept: '.pdf' } },
+                  ],
+                },
+              ],
             },
           ],
         },

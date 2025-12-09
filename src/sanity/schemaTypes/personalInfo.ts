@@ -128,6 +128,78 @@ export default defineType({
       ],
     }),
     defineField({
+      name: 'characterCertificate',
+      title: 'Character Certificate',
+      type: 'object',
+      fields: [
+        {
+          name: 'hasDocument',
+          title: 'Has Character Certificate',
+          type: 'boolean',
+          initialValue: false,
+        },
+        {
+          name: 'file',
+          title: 'Character Certificate File (PDF)',
+          type: 'file',
+          options: {
+            accept: '.pdf',
+          },
+          hidden: ({ parent }) => !parent?.hasDocument,
+        },
+        {
+          name: 'image',
+          title: 'Character Certificate Image',
+          type: 'image',
+          description: 'Upload an image to show as thumbnail preview',
+          options: { hotspot: true },
+          hidden: ({ parent }) => !parent?.hasDocument,
+        },
+        {
+          name: 'number',
+          title: 'Certificate Number (Optional)',
+          type: 'string',
+          hidden: ({ parent }) => !parent?.hasDocument,
+        },
+      ],
+    }),
+    defineField({
+      name: 'citizenshipCertificate',
+      title: 'Citizenship Certificate',
+      type: 'object',
+      fields: [
+        {
+          name: 'hasDocument',
+          title: 'Has Citizenship Certificate',
+          type: 'boolean',
+          initialValue: false,
+        },
+        {
+          name: 'file',
+          title: 'Citizenship Certificate File (PDF)',
+          type: 'file',
+          options: {
+            accept: '.pdf',
+          },
+          hidden: ({ parent }) => !parent?.hasDocument,
+        },
+        {
+          name: 'image',
+          title: 'Citizenship Certificate Image',
+          type: 'image',
+          description: 'Upload an image to show as thumbnail preview',
+          options: { hotspot: true },
+          hidden: ({ parent }) => !parent?.hasDocument,
+        },
+        {
+          name: 'number',
+          title: 'Certificate Number (Optional)',
+          type: 'string',
+          hidden: ({ parent }) => !parent?.hasDocument,
+        },
+      ],
+    }),
+    defineField({
       name: 'resume',
       title: 'CV/Resume',
       type: 'object',

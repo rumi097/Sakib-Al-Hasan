@@ -281,7 +281,7 @@ const Achievement: React.FC<AchievementProps> = ({ achievements }) => {
                           </div>
                         ) : (
                           /* 2. If multiple images */
-                          <div className="grid grid-cols-2 gap-[1px]">
+                          <div className="grid grid-cols-2 gap-px">
                             {achievement.images.slice(0, 2).map((img, i) => (
                               <div 
                                 key={i} 
@@ -308,7 +308,7 @@ const Achievement: React.FC<AchievementProps> = ({ achievements }) => {
                     ) : null}
 
                     {/* Content Section */}
-                    <div className="p-6 flex flex-col flex-grow">
+                    <div className="p-6 flex flex-col grow">
                       <div className="flex justify-between items-start mb-4">
                         <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${colors.badge}`}>
                           {achievement.category}

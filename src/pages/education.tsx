@@ -10,6 +10,22 @@ interface Certificate {
   name?: string;
   image?: any;
   link?: string;
+  file?: { asset?: { url?: string } };
+}
+
+interface SemesterDocument {
+  _key?: string;
+  name?: string;
+  link?: string;
+  file?: { asset?: { url?: string } };
+}
+
+interface SemesterEntry {
+  _key: string;
+  label: string;
+  title?: string;
+  result?: string;
+  documents?: SemesterDocument[];
 }
 
 // Interface for a single education entry
@@ -21,7 +37,9 @@ interface EducationEntry {
   startDate: string;
   endDate?: string;
   description?: string;
+  section?: string;
   certificates?: Certificate[]; // This is the array of certificates
+  semesters?: SemesterEntry[];
 }
 
 interface EducationProps {
@@ -40,6 +58,24 @@ const Education: React.FC<EducationProps> = ({ educationEntries }) => {
     );
   }
   
+  // Sort entries by startDate desc and group by section
+  const sorted = [...educationEntries].sort((a, b) => {
+    const at = a.startDate ? new Date(a.startDate).getTime() : 0;
+    const bt = b.startDate ? new Date(b.startDate).getTime() : 0;
+    return bt - at;
+  });
+
+  const grouped: Record<string, EducationEntry[]> = {};
+  const sectionOrder: string[] = [];
+  sorted.forEach((e) => {
+    const key = e.section?.trim() || 'General';
+    if (!grouped[key]) {
+      grouped[key] = [];
+      sectionOrder.push(key);
+    }
+    grouped[key].push(e);
+  });
+
   return (
     <section className="py-12">
       <motion.h1 
@@ -50,15 +86,26 @@ const Education: React.FC<EducationProps> = ({ educationEntries }) => {
       >
         Education
       </motion.h1>
-      <div className="space-y-10 max-w-4xl mx-auto">
-        {educationEntries.map((entry, index) => (
+      <div className="space-y-12 max-w-4xl mx-auto">
+        {sectionOrder.map((sectionName, sIdx) => (
+          <div key={sectionName}>
+            <motion.h2
+              className="text-2xl font-bold text-gray-800 mb-4"
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.25, delay: sIdx * 0.05 }}
+            >
+              {sectionName}
+            </motion.h2>
+            <div className="space-y-10">
+              {grouped[sectionName].map((entry, index) => (
           <motion.div
             key={entry._id}
-            className="bg-white p-8 rounded-lg shadow-md hover:shadow-2xl transition-all duration-300"
+            className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
             initial={{ opacity: 0, x: -50, rotateY: -10 }}
             animate={{ opacity: 1, x: 0, rotateY: 0 }}
-            transition={{ delay: index * 0.15, duration: 0.6, type: "spring" }}
-            whileHover={{ scale: 1.02, y: -5 }}
+            transition={{ delay: index * 0.05, duration: 0.25, type: "spring", stiffness: 260, damping: 18 }}
+            whileHover={{ y: -3 }}
           >
             <h2 className="text-2xl font-bold text-indigo-700">{entry.degree}</h2>
             <p className="text-xl font-semibold text-gray-800 mt-1">{entry.institution}, {entry.location}</p>
@@ -77,7 +124,7 @@ const Education: React.FC<EducationProps> = ({ educationEntries }) => {
                 <div className="flex flex-wrap gap-4">
                   
                   {entry.certificates.map((cert) => (
-                    <div key={cert._key} className="p-4 border rounded-md bg-gray-50 flex-1 min-w-[200px] max-w-xs">
+                    <div key={cert._key} className="p-4 border rounded-md bg-gray-50 flex-1 min-w-[220px] max-w-xs">
                       
                       {cert.image && (
                         <div className="relative w-full h-32 mb-2 rounded overflow-hidden shadow-sm">
@@ -94,16 +141,28 @@ const Education: React.FC<EducationProps> = ({ educationEntries }) => {
                         {cert.name || 'Certificate'}
                       </p>
                       
-                      {cert.link && (
-                        <a
-                          href={cert.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
-                        >
-                          View Link
-                        </a>
-                      )}
+                      <div className="mt-2 flex items-center gap-3">
+                        {cert.link && (
+                          <a
+                            href={cert.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                          >
+                            Link
+                          </a>
+                        )}
+                        {cert.file?.asset?.url && (
+                          <a
+                            href={cert.file.asset.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-red-600 hover:text-red-700 text-sm font-medium"
+                          >
+                            PDF
+                          </a>
+                        )}
+                      </div>
                     </div>
                   ))}
                   
@@ -112,7 +171,61 @@ const Education: React.FC<EducationProps> = ({ educationEntries }) => {
             )}
             {/* --- END OF NEW SECTION --- */}
 
+            {/* Semesters */}
+            {entry.semesters && entry.semesters.length > 0 && (
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <h4 className="font-semibold text-gray-800 mb-4">Semesters</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {entry.semesters.map((sem) => (
+                    <div key={sem._key} className="p-4 rounded-md border bg-gray-50">
+                      <div className="flex items-center justify-between">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded bg-indigo-100 text-indigo-700 text-sm font-semibold">
+                          {sem.label}
+                        </span>
+                        {sem.result && (
+                          <span className="text-gray-800 text-sm font-medium">{sem.result}</span>
+                        )}
+                      </div>
+                      {sem.title && <p className="mt-1 text-gray-700 text-sm">{sem.title}</p>}
+                      {sem.documents && sem.documents.length > 0 && (
+                        <div className="mt-3 flex flex-wrap gap-3">
+                          {sem.documents.map((doc, idx) => (
+                            <div key={(doc._key || '') + idx} className="flex items-center gap-2">
+                              <span className="text-gray-900 text-sm font-medium">{doc.name || 'Document'}:</span>
+                              {doc.link && (
+                                <a
+                                  href={doc.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                                >
+                                  Link
+                                </a>
+                              )}
+                              {doc.file?.asset?.url && (
+                                <a
+                                  href={doc.file.asset.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-red-600 hover:text-red-700 text-sm font-medium"
+                                >
+                                  PDF
+                                </a>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
           </motion.div>
+              ))}
+            </div>
+          </div>
         ))}
       </div>
        
@@ -136,7 +249,26 @@ export const getStaticProps: GetStaticProps = async () => {
       startDate,
       endDate,
       description,
-      certificates // <-- Fetches the array
+      section,
+      certificates[]{
+        _key,
+        name,
+        image,
+        link,
+        file{asset->{url}}
+      },
+      semesters[]{
+        _key,
+        label,
+        title,
+        result,
+        documents[]{
+          _key,
+          name,
+          link,
+          file{asset->{url}}
+        }
+      }
     }
   `);
 

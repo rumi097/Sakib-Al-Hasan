@@ -15,6 +15,7 @@ import researchProfile from './researchProfile';
 import personalInfo from './personalInfo';
 import homePagePreviews from './homePagePreviews';
 import achievement from './achievement';
+import trainingCertification from './trainingCertification';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   // Add all your imported schemas to this array
@@ -32,6 +33,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     researchProfile,
     personalInfo,
     homePagePreviews,
-    achievement
+    achievement,
+    trainingCertification
   ],
 }

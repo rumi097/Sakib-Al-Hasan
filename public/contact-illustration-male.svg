@@ -1,0 +1,244 @@
+<svg width="800" height="500" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Modern Gradients -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FAFBFF"/>
+      <stop offset="100%" stop-color="#F0F4FF"/>
+    </linearGradient>
+    
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+    
+    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#6366F1"/>
+    </linearGradient>
+    
+    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    
+    <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+
+    <!-- Modern Shadows -->
+    <filter id="dropShadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="8"/>
+      <feOffset dx="0" dy="4"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.15"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Smooth Animations -->
+    <style>
+      @keyframes floatSmooth {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-15px); }
+      }
+      @keyframes floatSlow {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+      }
+      @keyframes scaleBreath {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+      }
+      @keyframes fadeInOut {
+        0%, 100% { opacity: 0.4; }
+        50% { opacity: 1; }
+      }
+      @keyframes slideMessage {
+        0% { transform: translateX(-100px); opacity: 0; }
+        20% { opacity: 1; }
+        80% { opacity: 1; }
+        100% { transform: translateX(100px); opacity: 0; }
+      }
+      @keyframes ripple {
+        0% { transform: scale(0.8); opacity: 0.8; }
+        100% { transform: scale(1.5); opacity: 0; }
+      }
+      @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      
+      .float-1 { animation: floatSmooth 4s ease-in-out infinite; }
+      .float-2 { animation: floatSlow 5s ease-in-out infinite; }
+      .float-3 { animation: floatSmooth 6s ease-in-out infinite; }
+      .breath { animation: scaleBreath 3s ease-in-out infinite; }
+      .fade { animation: fadeInOut 2s ease-in-out infinite; }
+      .message { animation: slideMessage 6s ease-in-out infinite; }
+      .ripple { animation: ripple 2s ease-out infinite; }
+      .rotate-slow { animation: rotate 20s linear infinite; }
+    </style>
+  </defs>
+
+  <!-- Soft gradient background -->
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+  
+  <!-- Decorative background elements -->
+  <circle cx="120" cy="100" r="70" fill="#E0E7FF" opacity="0.3" class="float-2"/>
+  <circle cx="680" cy="400" r="80" fill="#DBEAFE" opacity="0.25" class="float-3"/>
+  <circle cx="720" cy="120" r="60" fill="#F3E8FF" opacity="0.3" class="float-1"/>
+
+  <!-- Main Central Smartphone -->
+  <g transform="translate(270, 100)" filter="url(#dropShadow)">
+    <g class="float-1">
+      <!-- Phone body with 3D effect -->
+      <rect x="0" y="0" width="260" height="310" rx="32" fill="#1E293B"/>
+      <rect x="8" y="8" width="244" height="294" rx="28" fill="#0F172A"/>
+      
+      <!-- Screen glow -->
+      <rect x="16" y="26" width="228" height="260" rx="22" fill="url(#blueGrad)" opacity="0.05"/>
+      
+      <!-- Status bar -->
+      <g opacity="0.8">
+        <text x="26" y="50" fill="#94A3B8" font-family="Arial" font-size="14" font-weight="600">9:41</text>
+        <circle cx="220" cy="43" r="4" fill="#10B981" class="breath"/>
+        <rect x="234" y="39" width="3" height="8" rx="1.5" fill="#94A3B8"/>
+        <rect x="238" y="36" width="3" height="11" rx="1.5" fill="#94A3B8"/>
+        <rect x="242" y="33" width="3" height="14" rx="1.5" fill="#3B82F6" class="fade"/>
+      </g>
+      
+      <!-- Chat/Contact App Interface -->
+      <g transform="translate(26, 72)">
+        <!-- App Icons Grid -->
+        <g>
+          <!-- Row 1 -->
+          <rect x="0" y="0" width="50" height="50" rx="12" fill="url(#blueGrad)" class="breath" style="animation-delay: 0s"/>
+          <path d="M16 16 L20 24 L34 10" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>
+          
+          <rect x="62" y="0" width="50" height="50" rx="12" fill="url(#greenGrad)" class="breath" style="animation-delay: 0.2s"/>
+          <circle cx="87" cy="25" r="10" fill="none" stroke="#fff" stroke-width="3"/>
+          <path d="M87 25 L87 31 M87 25 L91 29" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+          
+          <rect x="124" y="0" width="50" height="50" rx="12" fill="url(#purpleGrad)" class="breath" style="animation-delay: 0.4s"/>
+          <rect x="139" y="15" width="20" height="20" rx="4" fill="#fff"/>
+          <path d="M139 25 L149 15 L159 25" stroke="#8B5CF6" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          
+          <rect x="186" y="0" width="50" height="50" rx="12" fill="url(#orangeGrad)" class="breath" style="animation-delay: 0.6s"/>
+          <circle cx="211" cy="25" r="8" fill="none" stroke="#fff" stroke-width="3"/>
+          <path d="M219 33 L227 41" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+        </g>
+        
+        <!-- Contact Cards -->
+        <g transform="translate(0, 72)">
+          <!-- Card 1 - Email -->
+          <rect x="0" y="0" width="228" height="64" rx="14" fill="#1E40AF" opacity="0.15" class="breath"/>
+          <circle cx="26" cy="32" r="16" fill="url(#blueGrad)"/>
+          <path d="M18 28 L26 34 L34 28" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="52" y="28" fill="#E2E8F0" font-family="Arial" font-size="15" font-weight="600">Email Contact</text>
+          <text x="52" y="44" fill="#94A3B8" font-family="Arial" font-size="12">Send a message</text>
+          
+          <!-- Card 2 - Phone -->
+          <rect x="0" y="74" width="228" height="64" rx="14" fill="#059669" opacity="0.15" class="breath" style="animation-delay: 0.3s"/>
+          <circle cx="26" cy="106" r="16" fill="url(#greenGrad)"/>
+          <path d="M22 102 Q21 101 22 100 L24 98 Q25 97 26 98 L28 100 Q29 101 28 102 L26 104" fill="#fff"/>
+          <text x="52" y="102" fill="#E2E8F0" font-family="Arial" font-size="15" font-weight="600">Phone Call</text>
+          <text x="52" y="118" fill="#94A3B8" font-family="Arial" font-size="12">Quick connect</text>
+          
+          <!-- Card 3 - LinkedIn -->
+          <rect x="0" y="148" width="228" height="64" rx="14" fill="#6366F1" opacity="0.15" class="breath" style="animation-delay: 0.6s"/>
+          <circle cx="26" cy="180" r="16" fill="url(#purpleGrad)"/>
+          <text x="20" y="187" fill="#fff" font-family="Arial" font-size="16" font-weight="bold">in</text>
+          <text x="52" y="176" fill="#E2E8F0" font-family="Arial" font-size="15" font-weight="600">LinkedIn</text>
+          <text x="52" y="192" fill="#94A3B8" font-family="Arial" font-size="12">Professional network</text>
+        </g>
+      </g>
+      
+      <!-- Notification Badge -->
+      <circle cx="236" cy="24" r="13" fill="#EF4444" filter="url(#softGlow)"/>
+      <text x="236" y="29" fill="#fff" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">5</text>
+      
+      <!-- Home indicator -->
+      <rect x="98" y="290" width="64" height="5" rx="2.5" fill="#475569" opacity="0.4"/>
+    </g>
+  </g>
+
+  <!-- Floating Message Bubbles -->
+  <g class="float-2">
+    <!-- Incoming message - left -->
+    <g transform="translate(60, 190)" filter="url(#dropShadow)">
+      <path d="M0 26 Q0 13 13 13 L117 13 Q130 13 130 26 L130 58 Q130 71 117 71 L32 71 L13 91 L19 71 L13 71 Q0 71 0 58 Z" 
+            fill="url(#blueGrad)"/>
+      <text x="19" y="39" fill="#fff" font-family="Arial" font-size="17" font-weight="500">Hello! 👋</text>
+      <text x="19" y="61" fill="#E0E7FF" font-family="Arial" font-size="14">Let's connect</text>
+    </g>
+  </g>
+
+  <!-- Outgoing message - right -->
+  <g class="float-3">
+    <g transform="translate(560, 280)" filter="url(#dropShadow)">
+      <path d="M0 13 Q0 0 13 0 L169 0 Q182 0 182 13 L182 52 Q182 65 169 65 L149 65 L169 85 L162 65 L13 65 Q0 65 0 52 Z" 
+            fill="url(#greenGrad)"/>
+      <text x="19" y="29" fill="#fff" font-family="Arial" font-size="17" font-weight="500">Great! Looking forward 🚀</text>
+      <text x="143" y="55" fill="#D1FAE5" font-family="Arial" font-size="12">Just now</text>
+    </g>
+  </g>
+
+  <!-- Floating Email Icon -->
+  <g transform="translate(600, 110)" class="float-1" filter="url(#dropShadow)">
+    <circle cx="40" cy="40" r="40" fill="#fff"/>
+    <circle cx="40" cy="40" r="37" fill="url(#blueGrad)" opacity="0.1"/>
+    <g transform="translate(19, 23)">
+      <rect width="42" height="34" rx="6" fill="none" stroke="url(#blueGrad)" stroke-width="3.5"/>
+      <path d="M0 6 L21 22 L42 6" fill="none" stroke="url(#blueGrad)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <!-- Ripple effect -->
+    <circle cx="40" cy="40" r="40" fill="none" stroke="#3B82F6" stroke-width="2.5" opacity="0.3" class="ripple"/>
+  </g>
+
+  <!-- Floating Phone Icon -->
+  <g transform="translate(120, 350)" class="float-2" filter="url(#dropShadow)">
+    <circle cx="35" cy="35" r="35" fill="#fff"/>
+    <circle cx="35" cy="35" r="32" fill="url(#greenGrad)" opacity="0.1"/>
+    <g transform="translate(18, 18)">
+      <path d="M4 8 Q3 7 4 6 L7 3 Q8 2 9 3 L12 6 Q13 7 12 8 L9 11 Q7 13 4 11 Q1 8 4 6" 
+            fill="none" stroke="url(#greenGrad)" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M19 4 Q25 10 19 16" stroke="url(#greenGrad)" stroke-width="3" fill="none" stroke-linecap="round" class="fade"/>
+    </g>
+    <!-- Ripple effect -->
+    <circle cx="35" cy="35" r="35" fill="none" stroke="#10B981" stroke-width="2.5" opacity="0.3" class="ripple" style="animation-delay: 1s"/>
+  </g>
+
+  <!-- Connection Lines - Animated -->
+  <g opacity="0.2">
+    <path d="M 270 230 Q 180 230 155 290" stroke="url(#blueGrad)" stroke-width="4" fill="none" stroke-dasharray="8 8">
+      <animate attributeName="stroke-dashoffset" from="0" to="-32" dur="2s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 530 260 Q 600 230 640 150" stroke="url(#greenGrad)" stroke-width="4" fill="none" stroke-dasharray="8 8">
+      <animate attributeName="stroke-dashoffset" from="0" to="-32" dur="2s" repeatCount="indefinite"/>
+    </path>
+  </g>
+
+  <!-- Decorative Dots -->
+  <g opacity="0.4">
+    <circle cx="250" cy="440" r="5" fill="#3B82F6" class="breath"/>
+    <circle cx="550" cy="90" r="4" fill="#8B5CF6" class="breath" style="animation-delay: 0.5s"/>
+    <circle cx="750" cy="310" r="4.5" fill="#10B981" class="breath" style="animation-delay: 1s"/>
+  </g>
+
+  <!-- Corner Accents -->
+  <g opacity="0.25">
+    <circle cx="40" cy="40" r="6" fill="#6366F1"/>
+    <circle cx="760" cy="460" r="6" fill="#3B82F6"/>
+  </g>
+</svg>

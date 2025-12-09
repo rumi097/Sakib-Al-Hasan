@@ -38,10 +38,26 @@ interface ExpActivitySection {
   activityGroups: ActivityGroup[];
 }
 
+// --- Interfaces for "Training & Certifications" (Standalone) ---
+interface TrainingCertification {
+  _id: string;
+  name: string;
+  issuer: string;
+  date: string;
+  description?: string;
+  link?: string;
+  file?: {
+    asset: {
+      url: string;
+    };
+  };
+}
+
 // --- Main Page Props (Contains BOTH data types) ---
 interface ExperienceProps {
   experience: ExperienceEntry[];
   activitySections: ExpActivitySection[];
+  trainingCertifications: TrainingCertification[];
 }
 
 // --- Animation Variants ---
@@ -65,7 +81,7 @@ const imageItemVariants = {
   show: { opacity: 1, scale: 1 },
 };
 
-const ExperiencePage: React.FC<ExperienceProps> = ({ experience, activitySections }) => {
+const ExperiencePage: React.FC<ExperienceProps> = ({ experience, activitySections, trainingCertifications }) => {
   return (
     <section className="py-8">
       <motion.h1
@@ -110,10 +126,98 @@ const ExperiencePage: React.FC<ExperienceProps> = ({ experience, activitySection
         ))}
       </div>
 
-      {/* --- Horizontal Divider --- */}
-      <hr className="max-w-4xl mx-auto border-t-2 border-gray-200 mb-16" />
+      {/* --- SECTION 2: TRAINING & CERTIFICATIONS --- */}
+      {trainingCertifications && trainingCertifications.length > 0 && (
+        <>
+          <motion.div
+            className="max-w-4xl mx-auto mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <h2 className="text-3xl font-extrabold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-cyan-500">
+              Training & Certifications
+            </h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {trainingCertifications.map((cert, idx) => (
+                <motion.div
+                  key={cert._id}
+                  className="group bg-white/80 backdrop-blur-sm border border-slate-200 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 ring-1 ring-transparent hover:ring-indigo-200"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: idx * 0.1 }}
+                >
+                  <div className="mb-3 flex items-start gap-3">
+                    <span className="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-cyan-500 text-white shadow-sm">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 17l-5 2 1-5-4-4 5-.7L12 4l3 5.3 5 .7-4 4 1 5-5-2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </span>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-slate-900">
+                        {cert.name}
+                      </h3>
+                      <p className="text-xs text-slate-500 mt-0.5">
+                        {cert.issuer}
+                        <span className="mx-1">•</span>
+                        {new Date(cert.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {cert.description && (
+                    <p className="text-sm text-gray-700 mb-3 line-clamp-2">{cert.description}</p>
+                  )}
+                  
+                  <div className="flex gap-2 mt-auto">
+                    {cert.link && (
+                      <a
+                        href={cert.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-slate-50 text-slate-700 hover:bg-slate-100 transition-colors border border-slate-200"
+                        aria-label={`View certificate for ${cert.name}`}
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M14 3h7v7m0-7L10 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M20 14v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        View Certificate
+                      </a>
+                    )}
+                    {cert.file?.asset?.url && (
+                      <a
+                        href={cert.file.asset.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
+                        aria-label={`View PDF certificate for ${cert.name}`}
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M7 3h6l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M13 3v6h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        View PDF
+                      </a>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
 
-      {/* --- SECTION 2: NEXTGEN-STYLE ACTIVITY SECTION --- */}
+          {/* --- Horizontal Divider --- */}
+          <hr className="max-w-4xl mx-auto border-t-2 border-gray-200 mb-16" />
+        </>
+      )}
+
+      {/* --- Horizontal Divider (fallback if no certifications) --- */}
+      {(!trainingCertifications || trainingCertifications.length === 0) && (
+        <hr className="max-w-4xl mx-auto border-t-2 border-gray-200 mb-16" />
+      )}
+
+      {/* --- SECTION 3: NEXTGEN-STYLE ACTIVITY SECTION --- */}
       
       {/* --- "JUMP TO SECTION" BOX --- */}
       <motion.div
@@ -244,10 +348,28 @@ export const getStaticProps: GetStaticProps = async () => {
     }
   `);
 
+  // Query 3: Fetch training certifications
+  const trainingCertifications = await sanityClient.fetch(`
+    *[_type == "trainingCertification"] | order(date desc) {
+      _id,
+      name,
+      issuer,
+      date,
+      description,
+      link,
+      file {
+        asset-> {
+          url
+        }
+      }
+    }
+  `);
+
   return {
     props: {
       experience: experience || [],
       activitySections: activitySections || [],
+      trainingCertifications: trainingCertifications || [],
     },
     revalidate: 60,
   };

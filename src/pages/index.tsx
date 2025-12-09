@@ -65,6 +65,8 @@ interface PersonalInfo {
   passport?: PersonalDocument;
   nid?: PersonalDocument;
   birthCertificate?: PersonalDocument;
+  characterCertificate?: PersonalDocument;
+  citizenshipCertificate?: PersonalDocument;
   resume?: PersonalDocument;
   additionalDocuments?: AdditionalDocument[];
 }
@@ -535,6 +537,68 @@ const Home: React.FC<HomeProps> = ({ homeContent, personalInfo, previews }) => {
                   <div className="text-4xl text-center mb-2">📜</div>
                 )}
                 <p className="text-center text-sm font-semibold text-gray-800">Birth Certificate</p>
+                <p className="text-center text-xs text-gray-600 mt-1">Click to view</p>
+              </motion.a>
+            )}
+
+            {/* Character Certificate */}
+            {personalInfo?.characterCertificate?.hasDocument && (
+              <motion.a
+                href={personalInfo.characterCertificate.file?.asset?.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-orange-100 hover:bg-orange-200 p-4 rounded-lg shadow-md cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-xl overflow-hidden"
+                initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
+                whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.85 }}
+                whileHover={{ y: -5 }}
+              >
+                {personalInfo.characterCertificate.image ? (
+                  <div className="relative w-full h-24 mb-2 rounded overflow-hidden">
+                    <Image
+                      src={urlFor(personalInfo.characterCertificate.image).url()}
+                      alt="Character Certificate"
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded"
+                    />
+                  </div>
+                ) : (
+                  <div className="text-4xl text-center mb-2">🧾</div>
+                )}
+                <p className="text-center text-sm font-semibold text-gray-800">Character Certificate</p>
+                <p className="text-center text-xs text-gray-600 mt-1">Click to view</p>
+              </motion.a>
+            )}
+
+            {/* Citizenship Certificate */}
+            {personalInfo?.citizenshipCertificate?.hasDocument && (
+              <motion.a
+                href={personalInfo.citizenshipCertificate.file?.asset?.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-teal-100 hover:bg-teal-200 p-4 rounded-lg shadow-md cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-xl overflow-hidden"
+                initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
+                whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.875 }}
+                whileHover={{ y: -5 }}
+              >
+                {personalInfo.citizenshipCertificate.image ? (
+                  <div className="relative w-full h-24 mb-2 rounded overflow-hidden">
+                    <Image
+                      src={urlFor(personalInfo.citizenshipCertificate.image).url()}
+                      alt="Citizenship Certificate"
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded"
+                    />
+                  </div>
+                ) : (
+                  <div className="text-4xl text-center mb-2">🏛️</div>
+                )}
+                <p className="text-center text-sm font-semibold text-gray-800">Citizenship Certificate</p>
                 <p className="text-center text-xs text-gray-600 mt-1">Click to view</p>
               </motion.a>
             )}
@@ -1273,6 +1337,26 @@ export const getStaticProps: GetStaticProps = async () => {
         number
       },
       birthCertificate {
+        hasDocument,
+        file {
+          asset -> {
+            url
+          }
+        },
+        image,
+        number
+      },
+      characterCertificate {
+        hasDocument,
+        file {
+          asset -> {
+            url
+          }
+        },
+        image,
+        number
+      },
+      citizenshipCertificate {
         hasDocument,
         file {
           asset -> {
