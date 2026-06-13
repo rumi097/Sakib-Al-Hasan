@@ -67,7 +67,7 @@ const PublicationCard = ({ pub, index }: { pub: Publication, index: number }) =>
       <div className="shrink-0 w-full md:w-32 h-48 md:h-40 relative bg-gray-50 rounded-md overflow-hidden border border-gray-100 flex items-center justify-center">
         {pub.journalCover ? (
           <Image 
-            src={urlFor(pub.journalCover).url()} 
+            src={pub.journalCover as string} 
             alt="Journal Cover" 
             layout="fill" 
             objectFit="contain" // <--- FIX: 'contain' ensures the whole image is visible
@@ -266,7 +266,10 @@ const PublicationPage: React.FC<PageProps> = ({ profile, publications }) => {
 
 export const getStaticProps: GetStaticProps = async () => {
   const profileData = await sanityClient.fetch(`
-    *[_type == "researchProfile"][0]
+    *[_type == "researchProfile"][0] {
+      googleScholarUrl,
+      researchGateUrl
+    }
   `);
 
   const publicationsData = await sanityClient.fetch(`
@@ -275,7 +278,7 @@ export const getStaticProps: GetStaticProps = async () => {
       title,
       category,
       abstract,
-      journalCover,
+      "journalCover": journalCover.asset->url,
       authors,
       journalName,
       year,
